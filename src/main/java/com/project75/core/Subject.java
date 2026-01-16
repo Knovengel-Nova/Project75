@@ -11,4 +11,5 @@ public class Subject implements Serializable{
     private String subProfessor;
     private int totalLectures;
     private int attendedLectures;
+    private String subId;
 }
