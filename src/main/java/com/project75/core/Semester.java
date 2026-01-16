@@ -20,10 +20,19 @@ public class Semester implements Serializable{
         return noOfSubjects;
     }
     
+    public Subject[] getSubs(){
+        return subs;
+    }
+    
     public Subject getSubject(String subId){
         for(Subject s : subs){
-            if()
+            if(s.getSubId().equalsIgnoreCase(subId)){
+                return s;
+            }
         }
+        
+        System.out.println("Error:\tSubject Not Found!");
+        return new Subject();
     }
 
     public Semester(int sem, int noOfSubjects) {
