@@ -36,9 +36,6 @@ public class MainFrame extends javax.swing.JFrame {
         panelAttendanceStats.setLayout(new java.awt.BorderLayout());
         panelAttendanceStats.add(scroll, java.awt.BorderLayout.CENTER);
 
-        toggleDarkMode.setSelected(SettingsData.isDarkMode);
-        toggleDarkMode.setText(SettingsData.isDarkMode ? "ON" : "OFF");
-        Project75.updateTheme(SettingsData.isDarkMode);
     }
 
     @SuppressWarnings("unchecked")
@@ -55,9 +52,10 @@ public class MainFrame extends javax.swing.JFrame {
         buttonRemoveSubject = new javax.swing.JButton();
         buttonAddNewSubject = new javax.swing.JButton();
         panelAttendanceStats = new javax.swing.JPanel();
-        panelSettings = new javax.swing.JPanel();
-        toggleDarkMode = new javax.swing.JToggleButton();
-        jLabel1 = new javax.swing.JLabel();
+        panelTimeTable = new javax.swing.JPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTable1 = new javax.swing.JTable();
+        jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("MainFrame");
@@ -153,41 +151,46 @@ public class MainFrame extends javax.swing.JFrame {
 
         tabbedPane.addTab("Attendance Stats", panelAttendanceStats);
 
-        toggleDarkMode.setFont(new java.awt.Font("Exo 2 SemiBold", 1, 18)); // NOI18N
-        toggleDarkMode.setForeground(new java.awt.Color(255, 255, 255));
-        toggleDarkMode.setSelected(true);
-        toggleDarkMode.setText("ON");
-        toggleDarkMode.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                toggleDarkModeActionPerformed(evt);
+        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null}
+            },
+            new String [] {
+                "Monday", "Tuesday", "Wednesday", "Thursday", "Friday"
             }
-        });
+        ));
+        jTable1.getTableHeader().setReorderingAllowed(false);
+        jScrollPane1.setViewportView(jTable1);
 
-        jLabel1.setFont(new java.awt.Font("Exo 2 SemiBold", 1, 18)); // NOI18N
-        jLabel1.setText("Dark Mode");
+        jButton1.setText("Save");
 
-        javax.swing.GroupLayout panelSettingsLayout = new javax.swing.GroupLayout(panelSettings);
-        panelSettings.setLayout(panelSettingsLayout);
-        panelSettingsLayout.setHorizontalGroup(
-            panelSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelSettingsLayout.createSequentialGroup()
+        javax.swing.GroupLayout panelTimeTableLayout = new javax.swing.GroupLayout(panelTimeTable);
+        panelTimeTable.setLayout(panelTimeTableLayout);
+        panelTimeTableLayout.setHorizontalGroup(
+            panelTimeTableLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelTimeTableLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(toggleDarkMode, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(826, Short.MAX_VALUE))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 589, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 256, Short.MAX_VALUE)
+                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
-        panelSettingsLayout.setVerticalGroup(
-            panelSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelSettingsLayout.createSequentialGroup()
+        panelTimeTableLayout.setVerticalGroup(
+            panelTimeTableLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelTimeTableLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(panelSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(toggleDarkMode, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(498, Short.MAX_VALUE))
+                .addGroup(panelTimeTableLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(panelTimeTableLayout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 533, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
-        tabbedPane.addTab("Settings", panelSettings);
+        tabbedPane.addTab("Time Table", panelTimeTable);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -236,15 +239,6 @@ public class MainFrame extends javax.swing.JFrame {
         textAreaText.append(str);
     }//GEN-LAST:event_listSubjectLisMouseClicked
 
-    private void toggleDarkModeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_toggleDarkModeActionPerformed
-        boolean dark = toggleDarkMode.isSelected();
-
-        SettingsData.isDarkMode = dark;
-        toggleDarkMode.setText(dark ? "ON" : "OFF");
-
-        Project75.updateTheme(dark);
-    }//GEN-LAST:event_toggleDarkModeActionPerformed
-
     public void addSubjectToList(Subject subject) {
 
         if (semester.hasSubject(subject.getSubCode())) {
@@ -262,16 +256,17 @@ public class MainFrame extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton buttonAddNewSubject;
     private javax.swing.JButton buttonRemoveSubject;
-    private javax.swing.JLabel jLabel1;
+    private javax.swing.JButton jButton1;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTable jTable1;
     private javax.swing.JLabel labelSubjects;
     private javax.swing.JList<Subject> listSubjectLis;
     private javax.swing.JPanel panelAttendanceStats;
-    private javax.swing.JPanel panelSettings;
     private javax.swing.JPanel panelSubjectList;
+    private javax.swing.JPanel panelTimeTable;
     private javax.swing.JScrollPane scrollPaneListScroll;
     private javax.swing.JScrollPane scrollPaneTextScroll;
     private javax.swing.JTabbedPane tabbedPane;
     private javax.swing.JTextArea textAreaText;
-    private javax.swing.JToggleButton toggleDarkMode;
     // End of variables declaration//GEN-END:variables
 }
