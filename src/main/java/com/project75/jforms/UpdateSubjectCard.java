@@ -255,8 +255,12 @@ public class UpdateSubjectCard extends javax.swing.JFrame {
             }
         }
 
-        Subject temp = new Subject(subName, profName, subCode, attendedLectures, totalLectures);
-        parent.updateSubjectCardData(temp);
+        subject.setSubName(subName);
+        subject.setSubCode(subCode);
+        subject.setSubProfessor(profName);
+        subject.setAttendedLectures(attendedLectures);
+        subject.setTotalLectures(totalLectures);
+        parent.updateSubjectCardData(subject);
         dispose();
     }//GEN-LAST:event_buttonUpdateActionPerformed
 

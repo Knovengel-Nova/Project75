@@ -18,6 +18,26 @@ public class Subject implements Serializable {
         return subName;
     }
 
+    public void setSubProfessor(String subProfessor) {
+        this.subProfessor = subProfessor;
+    }
+
+    public void setSubName(String subName) {
+        this.subName = subName;
+    }
+
+    public void setSubCode(String subCode) {
+        this.subCode = subCode;
+    }
+
+    public void setAttendedLectures(int attendedLectures) {
+        this.attendedLectures = attendedLectures;
+    }
+
+    public void setTotalLectures(int totalLectures) {
+        this.totalLectures = totalLectures;
+    }
+
     public String getSubProfessor() {
         return subProfessor;
     }
