@@ -26,6 +26,7 @@ public class MainFrame extends javax.swing.JFrame {
         initComponents();
         model = new DefaultListModel();
         listSubjectLis.setModel(model);
+        listSecondaryList.setModel(model);
 
         cardsHolder = new subjectCardsHolderPanel();
 
@@ -53,9 +54,13 @@ public class MainFrame extends javax.swing.JFrame {
         buttonAddNewSubject = new javax.swing.JButton();
         panelAttendanceStats = new javax.swing.JPanel();
         panelTimeTable = new javax.swing.JPanel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
-        jButton1 = new javax.swing.JButton();
+        scrollPaneTable = new javax.swing.JScrollPane();
+        tableTable = new javax.swing.JTable();
+        buttonSave = new javax.swing.JButton();
+        scrollPaneSecondaryList = new javax.swing.JScrollPane();
+        listSecondaryList = new javax.swing.JList<>();
+        buttonRemove = new javax.swing.JButton();
+        buttonAdd = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("MainFrame");
@@ -151,8 +156,14 @@ public class MainFrame extends javax.swing.JFrame {
 
         tabbedPane.addTab("Attendance Stats", panelAttendanceStats);
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tableTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
                 {null, null, null, null, null},
                 {null, null, null, null, null},
                 {null, null, null, null, null},
@@ -162,10 +173,40 @@ public class MainFrame extends javax.swing.JFrame {
                 "Monday", "Tuesday", "Wednesday", "Thursday", "Friday"
             }
         ));
-        jTable1.getTableHeader().setReorderingAllowed(false);
-        jScrollPane1.setViewportView(jTable1);
+        tableTable.setToolTipText("Time Tabel");
+        tableTable.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        tableTable.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        tableTable.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        tableTable.setShowGrid(true);
+        tableTable.getTableHeader().setReorderingAllowed(false);
+        tableTable.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tableTableMouseClicked(evt);
+            }
+        });
+        scrollPaneTable.setViewportView(tableTable);
 
-        jButton1.setText("Save");
+        buttonSave.setFont(new java.awt.Font("Exo 2 SemiBold", 1, 36)); // NOI18N
+        buttonSave.setText("Save");
+
+        listSecondaryList.setFont(new java.awt.Font("Exo 2 SemiBold", 1, 14)); // NOI18N
+        scrollPaneSecondaryList.setViewportView(listSecondaryList);
+
+        buttonRemove.setFont(new java.awt.Font("Exo 2 SemiBold", 1, 14)); // NOI18N
+        buttonRemove.setText("Remove");
+        buttonRemove.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buttonRemoveActionPerformed(evt);
+            }
+        });
+
+        buttonAdd.setFont(new java.awt.Font("Exo 2 SemiBold", 1, 14)); // NOI18N
+        buttonAdd.setText("Add");
+        buttonAdd.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buttonAddActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout panelTimeTableLayout = new javax.swing.GroupLayout(panelTimeTable);
         panelTimeTable.setLayout(panelTimeTableLayout);
@@ -173,9 +214,18 @@ public class MainFrame extends javax.swing.JFrame {
             panelTimeTableLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelTimeTableLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 589, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 256, Short.MAX_VALUE)
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(scrollPaneTable, javax.swing.GroupLayout.PREFERRED_SIZE, 589, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addGroup(panelTimeTableLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(scrollPaneSecondaryList, javax.swing.GroupLayout.DEFAULT_SIZE, 397, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelTimeTableLayout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addGroup(panelTimeTableLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(buttonSave, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelTimeTableLayout.createSequentialGroup()
+                                .addComponent(buttonAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(buttonRemove, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                 .addContainerGap())
         );
         panelTimeTableLayout.setVerticalGroup(
@@ -184,9 +234,14 @@ public class MainFrame extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(panelTimeTableLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(panelTimeTableLayout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 533, Short.MAX_VALUE))
+                        .addComponent(scrollPaneSecondaryList, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(panelTimeTableLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(buttonRemove, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(buttonAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(buttonSave))
+                    .addComponent(scrollPaneTable, javax.swing.GroupLayout.DEFAULT_SIZE, 533, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
@@ -239,6 +294,31 @@ public class MainFrame extends javax.swing.JFrame {
         textAreaText.append(str);
     }//GEN-LAST:event_listSubjectLisMouseClicked
 
+    private void tableTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableTableMouseClicked
+
+    }//GEN-LAST:event_tableTableMouseClicked
+
+    private void buttonAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonAddActionPerformed
+        if (listSecondaryList.getModel().getSize() == 0) {
+            System.out.println("List is Empty!");
+            return;
+        } else if (listSecondaryList.getSelectedIndex() == -1) {
+            System.out.println("Please Select a Subject from the list");
+            return;
+        }
+
+        if(tableTable.getSelectedColumn()>5 || tableTable.getSelectedColumn()<0 || tableTable.getSelectedRow() > 10 || tableTable.getSelectedRow() < 0){
+            System.out.println("Please select a cell in the table first.");
+            return;
+        }
+        
+        tableTable.setValueAt(listSecondaryList.getModel().getElementAt(listSecondaryList.getSelectedIndex()), tableTable.getSelectedRow(), tableTable.getSelectedColumn());
+    }//GEN-LAST:event_buttonAddActionPerformed
+
+    private void buttonRemoveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonRemoveActionPerformed
+        tableTable.setValueAt(null, tableTable.getSelectedRow(), tableTable.getSelectedColumn());
+    }//GEN-LAST:event_buttonRemoveActionPerformed
+
     public void addSubjectToList(Subject subject) {
 
         if (semester.hasSubject(subject.getSubCode())) {
@@ -254,19 +334,23 @@ public class MainFrame extends javax.swing.JFrame {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton buttonAdd;
     private javax.swing.JButton buttonAddNewSubject;
+    private javax.swing.JButton buttonRemove;
     private javax.swing.JButton buttonRemoveSubject;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JButton buttonSave;
     private javax.swing.JLabel labelSubjects;
+    private javax.swing.JList<Subject> listSecondaryList;
     private javax.swing.JList<Subject> listSubjectLis;
     private javax.swing.JPanel panelAttendanceStats;
     private javax.swing.JPanel panelSubjectList;
     private javax.swing.JPanel panelTimeTable;
     private javax.swing.JScrollPane scrollPaneListScroll;
+    private javax.swing.JScrollPane scrollPaneSecondaryList;
+    private javax.swing.JScrollPane scrollPaneTable;
     private javax.swing.JScrollPane scrollPaneTextScroll;
     private javax.swing.JTabbedPane tabbedPane;
+    private javax.swing.JTable tableTable;
     private javax.swing.JTextArea textAreaText;
     // End of variables declaration//GEN-END:variables
 }

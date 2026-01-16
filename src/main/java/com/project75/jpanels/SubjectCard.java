@@ -1,6 +1,7 @@
 package com.project75.jpanels;
 
 import com.project75.core.Subject;
+import com.project75.jforms.UpdateSubjectCard;
 import java.awt.Dimension;
 
 /**
@@ -13,6 +14,11 @@ public class SubjectCard extends javax.swing.JPanel {
 
     public Subject getSubject() {
         return subject;
+    }
+    
+    public void updateSubjectCardData(Subject temp){
+        this.subject = temp;
+        init();
     }
 
     private void init() {
@@ -135,7 +141,8 @@ public class SubjectCard extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void buttonEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonEditActionPerformed
-        // TODO add your handling code here:
+        UpdateSubjectCard update = new UpdateSubjectCard(this);
+        update.setVisible(true);
     }//GEN-LAST:event_buttonEditActionPerformed
 
 
