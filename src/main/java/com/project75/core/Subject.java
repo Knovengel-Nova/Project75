@@ -6,12 +6,13 @@ import java.io.Serializable;
  *
  * @author Aryan
  */
-public class Subject implements Serializable{
+public class Subject implements Serializable {
+
     private String subName;
     private String subProfessor;
-    private int totalLectures;
+    private String subCode;
     private int attendedLectures;
-    private String subId;
+    private int totalLectures;
 
     public String getSubName() {
         return subName;
@@ -21,31 +22,53 @@ public class Subject implements Serializable{
         return subProfessor;
     }
 
-    public int getTotalLectures() {
-        return totalLectures;
+    public String getSubCode() {
+        return subCode;
     }
-
+    
     public int getAttendedLectures() {
         return attendedLectures;
     }
-
-    public String getSubId() {
-        return subId;
+    
+    public int getTotalLectures() {
+        return totalLectures;
+    }
+    
+    public int getPercent(){
+        if(attendedLectures == 0)
+            return 0;
+        
+        return ((int)(attendedLectures * 100.00))/totalLectures;
     }
 
     public Subject(String subName, String subProfessor, String subId) {
         this.subName = subName;
         this.subProfessor = subProfessor;
-        this.subId = subId;
+        this.subCode = subId;
         this.totalLectures = 0;
         this.attendedLectures = 0;
     }
-    
-    public Subject(){
-        this.attendedLectures = -1;
-        this.totalLectures = -1;
+
+    public Subject(String subName, String subProfessor, String subId, int attendedLectures, int totalLectures) {
+        this.subName = subName;
+        this.subProfessor = subProfessor;
+        this.subCode = subId;
+        this.attendedLectures = attendedLectures;
+        this.totalLectures = totalLectures;
+    }
+
+    @Override
+    public String toString() {
+        return
+                "[SubCode: "+this.subCode+
+                ", Sub: "+this.subName+"]";
+    }
+
+    public Subject() {
+        this.attendedLectures = 0;
+        this.totalLectures = 0;
         this.subProfessor = "NO_PROFESSOR";
-        this.subId = "NO_ID";
+        this.subCode = "NO_ID";
         this.subName = "NO_NAME";
     }
 }

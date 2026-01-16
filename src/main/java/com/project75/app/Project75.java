@@ -1,6 +1,7 @@
 package com.project75.app;
 
-
+import com.formdev.flatlaf.FlatDarkLaf;
+import com.project75.jforms.MainFrame;
 
 /**
  *
@@ -9,6 +10,11 @@ package com.project75.app;
 public class Project75 {
 
     public static void main(String[] args) {
-        System.out.println("Hello World!");
+        FlatDarkLaf.setup();
+        
+        java.awt.EventQueue.invokeLater(() -> {
+            new MainFrame(3).setVisible(true);
+        });
     }
+
 }
