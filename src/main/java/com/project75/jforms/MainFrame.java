@@ -1,7 +1,6 @@
 package com.project75.jforms;
 
-import com.formdev.flatlaf.FlatDarkLaf;
-import com.formdev.flatlaf.FlatLaf;
+import com.formdev.flatlaf.*;
 import com.project75.app.Project75;
 import javax.swing.DefaultListModel;
 import com.project75.core.*;
@@ -34,8 +33,12 @@ public class MainFrame extends javax.swing.JFrame {
         scroll.setBorder(null);
         scroll.getVerticalScrollBar().setUnitIncrement(16);
 
-        jPanel2.setLayout(new java.awt.BorderLayout());
-        jPanel2.add(scroll, java.awt.BorderLayout.CENTER);
+        panelAttendanceStats.setLayout(new java.awt.BorderLayout());
+        panelAttendanceStats.add(scroll, java.awt.BorderLayout.CENTER);
+
+        toggleDarkMode.setSelected(SettingsData.isDarkMode);
+        toggleDarkMode.setText(SettingsData.isDarkMode ? "ON" : "OFF");
+        Project75.updateTheme(SettingsData.isDarkMode);
     }
 
     @SuppressWarnings("unchecked")
@@ -51,7 +54,10 @@ public class MainFrame extends javax.swing.JFrame {
         labelSubjects = new javax.swing.JLabel();
         buttonRemoveSubject = new javax.swing.JButton();
         buttonAddNewSubject = new javax.swing.JButton();
-        jPanel2 = new javax.swing.JPanel();
+        panelAttendanceStats = new javax.swing.JPanel();
+        panelSettings = new javax.swing.JPanel();
+        toggleDarkMode = new javax.swing.JToggleButton();
+        jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("MainFrame");
@@ -74,10 +80,11 @@ public class MainFrame extends javax.swing.JFrame {
         scrollPaneTextScroll.setViewportView(textAreaText);
 
         labelSubjects.setFont(new java.awt.Font("Exo 2 ExtraBold", 1, 36)); // NOI18N
+        labelSubjects.setForeground(new java.awt.Color(255, 255, 255));
         labelSubjects.setText("Subjects");
 
-        buttonRemoveSubject.setBackground(new java.awt.Color(255, 153, 153));
-        buttonRemoveSubject.setFont(new java.awt.Font("Exo 2 SemiBold", 1, 36)); // NOI18N
+        buttonRemoveSubject.setBackground(new java.awt.Color(214, 48, 49));
+        buttonRemoveSubject.setFont(new java.awt.Font("Exo 2 SemiBold", 1, 40)); // NOI18N
         buttonRemoveSubject.setForeground(new java.awt.Color(255, 255, 255));
         buttonRemoveSubject.setText("Remove Subject");
         buttonRemoveSubject.addActionListener(new java.awt.event.ActionListener() {
@@ -86,8 +93,8 @@ public class MainFrame extends javax.swing.JFrame {
             }
         });
 
-        buttonAddNewSubject.setBackground(new java.awt.Color(153, 255, 153));
-        buttonAddNewSubject.setFont(new java.awt.Font("Exo 2 SemiBold", 1, 36)); // NOI18N
+        buttonAddNewSubject.setBackground(new java.awt.Color(0, 184, 148));
+        buttonAddNewSubject.setFont(new java.awt.Font("Exo 2 SemiBold", 1, 40)); // NOI18N
         buttonAddNewSubject.setForeground(new java.awt.Color(255, 255, 255));
         buttonAddNewSubject.setText("Add New Subject");
         buttonAddNewSubject.addActionListener(new java.awt.event.ActionListener() {
@@ -133,18 +140,54 @@ public class MainFrame extends javax.swing.JFrame {
 
         tabbedPane.addTab("Subject List", panelSubjectList);
 
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        javax.swing.GroupLayout panelAttendanceStatsLayout = new javax.swing.GroupLayout(panelAttendanceStats);
+        panelAttendanceStats.setLayout(panelAttendanceStatsLayout);
+        panelAttendanceStatsLayout.setHorizontalGroup(
+            panelAttendanceStatsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 1016, Short.MAX_VALUE)
         );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        panelAttendanceStatsLayout.setVerticalGroup(
+            panelAttendanceStatsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 545, Short.MAX_VALUE)
         );
 
-        tabbedPane.addTab("Attendance Stats", jPanel2);
+        tabbedPane.addTab("Attendance Stats", panelAttendanceStats);
+
+        toggleDarkMode.setFont(new java.awt.Font("Exo 2 SemiBold", 1, 18)); // NOI18N
+        toggleDarkMode.setForeground(new java.awt.Color(255, 255, 255));
+        toggleDarkMode.setSelected(true);
+        toggleDarkMode.setText("ON");
+        toggleDarkMode.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                toggleDarkModeActionPerformed(evt);
+            }
+        });
+
+        jLabel1.setFont(new java.awt.Font("Exo 2 SemiBold", 1, 18)); // NOI18N
+        jLabel1.setText("Dark Mode");
+
+        javax.swing.GroupLayout panelSettingsLayout = new javax.swing.GroupLayout(panelSettings);
+        panelSettings.setLayout(panelSettingsLayout);
+        panelSettingsLayout.setHorizontalGroup(
+            panelSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelSettingsLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(toggleDarkMode, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(826, Short.MAX_VALUE))
+        );
+        panelSettingsLayout.setVerticalGroup(
+            panelSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelSettingsLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(panelSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(toggleDarkMode, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(498, Short.MAX_VALUE))
+        );
+
+        tabbedPane.addTab("Settings", panelSettings);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -193,6 +236,15 @@ public class MainFrame extends javax.swing.JFrame {
         textAreaText.append(str);
     }//GEN-LAST:event_listSubjectLisMouseClicked
 
+    private void toggleDarkModeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_toggleDarkModeActionPerformed
+        boolean dark = toggleDarkMode.isSelected();
+
+        SettingsData.isDarkMode = dark;
+        toggleDarkMode.setText(dark ? "ON" : "OFF");
+
+        Project75.updateTheme(dark);
+    }//GEN-LAST:event_toggleDarkModeActionPerformed
+
     public void addSubjectToList(Subject subject) {
 
         if (semester.hasSubject(subject.getSubCode())) {
@@ -210,14 +262,16 @@ public class MainFrame extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton buttonAddNewSubject;
     private javax.swing.JButton buttonRemoveSubject;
-    private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel4;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel labelSubjects;
     private javax.swing.JList<Subject> listSubjectLis;
+    private javax.swing.JPanel panelAttendanceStats;
+    private javax.swing.JPanel panelSettings;
     private javax.swing.JPanel panelSubjectList;
     private javax.swing.JScrollPane scrollPaneListScroll;
     private javax.swing.JScrollPane scrollPaneTextScroll;
     private javax.swing.JTabbedPane tabbedPane;
     private javax.swing.JTextArea textAreaText;
+    private javax.swing.JToggleButton toggleDarkMode;
     // End of variables declaration//GEN-END:variables
 }
