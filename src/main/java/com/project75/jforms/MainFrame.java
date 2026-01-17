@@ -1,14 +1,11 @@
 package com.project75.jforms;
 
-import com.formdev.flatlaf.*;
 import com.project75.app.Project75;
 import javax.swing.DefaultListModel;
 import com.project75.core.*;
 import com.project75.jpanels.SubjectCard;
 import com.project75.jpanels.subjectCardsHolderPanel;
-import javax.swing.JFrame;
 import javax.swing.JScrollPane;
-import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -17,25 +14,32 @@ import javax.swing.table.DefaultTableModel;
  */
 public class MainFrame extends javax.swing.JFrame {
 
-    DefaultListModel<Subject> model;
+    private DefaultListModel<Subject> model;
     private subjectCardsHolderPanel cardsHolder;
     private Semester semester;
     private int semNo;
 
     public MainFrame(int sem) {
+        //  setting up the semester in MainFrame
         semester = new Semester(sem);
         this.semNo = sem;
+
         initComponents();
+
+        //  set model for listSubject list and listSecondaryList
         model = new DefaultListModel();
         listSubjectLis.setModel(model);
         listSecondaryList.setModel(model);
 
+        //  set the CardHolder Panel
         cardsHolder = new subjectCardsHolderPanel();
 
+        //  set up scroll panel for SubjectCards
         JScrollPane scroll = new JScrollPane(cardsHolder);
         scroll.setBorder(null);
         scroll.getVerticalScrollBar().setUnitIncrement(16);
 
+        //  set border layout to accomodate Subject cards in 3xN form
         panelAttendanceStats.setLayout(new java.awt.BorderLayout());
         panelAttendanceStats.add(scroll, java.awt.BorderLayout.CENTER);
     }
@@ -302,16 +306,30 @@ public class MainFrame extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
+    //  pop addsubjectform 
     private void buttonAddNewSubjectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonAddNewSubjectActionPerformed
         AddSubjectForm subForm = new AddSubjectForm(this);
         subForm.setVisible(true);
     }//GEN-LAST:event_buttonAddNewSubjectActionPerformed
 
+    //  remove selected subject form subject list
     private void buttonRemoveSubjectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonRemoveSubjectActionPerformed
-        textAreaText.setText("");
+        textAreaText.setText("");   //  clear the text area
+
         if (listSubjectLis.getSelectedIndex() != -1) {
             textAreaText.append("Removed Subject! ");
-            semester.removeSub(listSubjectLis.getSelectedValue());
+            Subject temp = model.getElementAt(listSubjectLis.getSelectedIndex());
+
+            //  remove from Subject Cards
+            cardsHolder.removeCard(temp, semester.getNoOfSubjects());
+
+            //  remove subject from time table
+            removeSubjectFromTable(temp);
+
+            //  remove from semester class subjects array
+            semester.removeSub(temp);
+
+            //  remove from the model
             model.removeElementAt(listSubjectLis.getSelectedIndex());
         } else if (model.getSize() == 0) {  // if the list is empty
             textAreaText.append("List is Empty!");
@@ -320,6 +338,27 @@ public class MainFrame extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_buttonRemoveSubjectActionPerformed
 
+    public void removeSubjectFromTable(Subject temp) {
+        DefaultTableModel model = (DefaultTableModel) tableTable.getModel();
+
+        for (int row = 0; row < model.getRowCount(); row++) {
+            for (int col = 0; col < model.getColumnCount(); col++) {
+
+                Object value = model.getValueAt(row, col);
+                if (value == null) {
+                    continue;
+                }
+
+                if (value instanceof Subject sub) {
+                    if (sub.getSubCode().equalsIgnoreCase(temp.getSubCode())) {
+                        model.setValueAt(null, row, col);
+                    }
+                }
+            }
+        }
+    }
+
+    //  display info about selected subject
     private void listSubjectLisMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_listSubjectLisMouseClicked
 
         if (listSubjectLis.getSelectedIndex() == -1) { // if the list is empty
@@ -380,20 +419,26 @@ public class MainFrame extends javax.swing.JFrame {
 
     //  after retrieval of data reload the mainFrame Components
     private void reload() {
-        model.clear();
-        cardsHolder.removeAll();
+        model.clear();  //  clear list model
+        cardsHolder.removeAll();    //  card holder panel remove all
 
-        Subject[] subs = semester.getSubs();
-        
+        Subject[] subs = semester.getSubs();    //  get all subjects
+
         for (Subject s : subs) {
             model.addElement(s);
             cardsHolder.addCard(new SubjectCard(s));
         }
 
+        listSubjectLis.revalidate();
+        listSecondaryList.revalidate();
+        listSubjectLis.repaint();
+        listSecondaryList.repaint();
+
         cardsHolder.revalidate();
         cardsHolder.repaint();
     }
 
+    //  set Teable model to the given table model
     public void setTableModel(DefaultTableModel tableModel) {
         tableTable.setModel(tableModel);
 

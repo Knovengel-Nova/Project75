@@ -55,7 +55,8 @@ public class Semester implements Serializable{
     }
     
     public Subject[] getSubs(){
-        return (Subject[])subs.toArray();
+        return subs.toArray(new Subject[0]);
+        
     }
     
     public Subject getSubject(String subId){

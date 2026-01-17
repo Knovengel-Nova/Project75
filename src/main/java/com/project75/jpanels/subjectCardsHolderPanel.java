@@ -1,5 +1,6 @@
 package com.project75.jpanels;
 
+import com.project75.core.Subject;
 import java.awt.GridLayout;
 import javax.swing.BorderFactory;
 
@@ -9,10 +10,24 @@ import javax.swing.BorderFactory;
  */
 public class subjectCardsHolderPanel extends javax.swing.JPanel {
 
-    
-   public subjectCardsHolderPanel() {
+    public subjectCardsHolderPanel() {
         setLayout(new GridLayout(0, 3, 18, 18));
         setBorder(BorderFactory.createEmptyBorder(18, 18, 18, 18));
+
+    }
+
+    public void removeCard(Subject subject, int num) {
+        int i = -1;
+        for (i = 0; i < num; i++) {
+            SubjectCard sc = (SubjectCard) this.getComponent(i);
+            if (sc.getSubject().getSubCode().equalsIgnoreCase(subject.getSubCode())) {
+                break;
+            }
+        }
+
+        if (i != -1) {
+            this.remove(i);
+        }
 
     }
 
@@ -21,7 +36,7 @@ public class subjectCardsHolderPanel extends javax.swing.JPanel {
         revalidate();
         repaint();
     }
-    
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
