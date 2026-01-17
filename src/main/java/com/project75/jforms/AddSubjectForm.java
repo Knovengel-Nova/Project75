@@ -30,10 +30,10 @@ public class AddSubjectForm extends javax.swing.JFrame {
         textSubjectName = new javax.swing.JTextField();
         textSubjectProfessorName = new javax.swing.JTextField();
         textSubjectCode = new javax.swing.JTextField();
-        textAttendedLectures = new javax.swing.JTextField();
-        textTotalLectures = new javax.swing.JTextField();
         buttonCancel = new javax.swing.JButton();
         buttonAdd = new javax.swing.JButton();
+        spinnerAttendedLectures = new javax.swing.JSpinner();
+        spinnerTotalLectures = new javax.swing.JSpinner();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Add New Subject");
@@ -76,17 +76,6 @@ public class AddSubjectForm extends javax.swing.JFrame {
         textSubjectCode.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         textSubjectCode.setText("CE201");
 
-        textAttendedLectures.setFont(new java.awt.Font("Exo 2 SemiBold", 1, 18)); // NOI18N
-        textAttendedLectures.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        textAttendedLectures.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                textAttendedLecturesActionPerformed(evt);
-            }
-        });
-
-        textTotalLectures.setFont(new java.awt.Font("Exo 2 SemiBold", 1, 18)); // NOI18N
-        textTotalLectures.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-
         buttonCancel.setFont(new java.awt.Font("Exo 2 SemiBold", 1, 24)); // NOI18N
         buttonCancel.setText("Cancel");
         buttonCancel.addActionListener(new java.awt.event.ActionListener() {
@@ -103,6 +92,10 @@ public class AddSubjectForm extends javax.swing.JFrame {
             }
         });
 
+        spinnerAttendedLectures.setFont(new java.awt.Font("Exo 2 SemiBold", 1, 14)); // NOI18N
+
+        spinnerTotalLectures.setFont(new java.awt.Font("Exo 2 SemiBold", 1, 14)); // NOI18N
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -113,12 +106,6 @@ public class AddSubjectForm extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(57, 57, 57)
-                        .addComponent(textAttendedLectures, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(textTotalLectures, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(49, 49, 49))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
@@ -140,7 +127,13 @@ public class AddSubjectForm extends javax.swing.JFrame {
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                         .addComponent(labelTotalLectures, javax.swing.GroupLayout.PREFERRED_SIZE, 234, javax.swing.GroupLayout.PREFERRED_SIZE)))
                                 .addGap(0, 0, Short.MAX_VALUE)))
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(62, 62, 62)
+                        .addComponent(spinnerAttendedLectures, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(spinnerTotalLectures, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(75, 75, 75))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -162,15 +155,15 @@ public class AddSubjectForm extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(labelAttendedLectures, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(labelTotalLectures, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(textAttendedLectures, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(textTotalLectures, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(47, 47, 47)
+                    .addComponent(spinnerAttendedLectures, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(spinnerTotalLectures, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 40, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(buttonCancel, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(buttonAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(35, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         pack();
@@ -212,51 +205,27 @@ public class AddSubjectForm extends javax.swing.JFrame {
             return;
         }
 
-        String attLecStr = textAttendedLectures.getText().strip();
-
         int attendedLectures = 0;
         int totalLectures = 0;
         
-        if (!attLecStr.isEmpty()) {
-            textTotalLectures.setEditable(true);
-
-            try {
-                attendedLectures = Integer.parseInt(attLecStr);
-
-                if (attendedLectures < 0 || attendedLectures > 100) {
-                    System.out.println("Attended Lectures cannot be over 100 or negative!");
-                    return;
-                }
-            } catch (NumberFormatException e) {
-                showError("Please Enter a valid Number!");
-            }
-        }
-
-        if (attendedLectures != 0) {
-            String totLecStr = textTotalLectures.getText().strip();
-            try {
-                if (attendedLectures == 0) {
-                    return;
-                }
-                totalLectures = Integer.parseInt(totLecStr);
-
-                if (totalLectures < 0 || totalLectures > 100 || totalLectures < attendedLectures) {
-                    System.out.println("Total Lectures cannot be less than attended lectures or over 100 or negative!");
-                    return;
-                }
-            } catch (NumberFormatException e) {
-                showError("Please Enter a valid Number!");
-            }
+        if((int)spinnerAttendedLectures.getValue()<0 || (int)spinnerAttendedLectures.getValue()>100){
+            System.out.println("Attended Lectures Cannot be greater than 100 or negative!");
+            return;
+        }else if((int)spinnerTotalLectures.getValue()<0 || (int)spinnerTotalLectures.getValue()>100){
+            System.out.println("Total Lectures Cannot be greater than 100 or negative!");
+            return;
+        }else if((int)spinnerAttendedLectures.getValue() > (int)spinnerTotalLectures.getValue()){
+            System.out.println("Attended Lectures cannot be greater than Total Lectures!");
+            return;
+        }else{
+            attendedLectures = (int)spinnerAttendedLectures.getValue();
+            totalLectures = (int)spinnerTotalLectures.getValue();
         }
 
         Subject sub = new Subject(subName, profName, subCode, attendedLectures, totalLectures);
         parent.addSubjectToList(sub);
         dispose();
     }//GEN-LAST:event_buttonAddActionPerformed
-
-    private void textAttendedLecturesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textAttendedLecturesActionPerformed
-        
-    }//GEN-LAST:event_textAttendedLecturesActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton buttonAdd;
@@ -267,10 +236,10 @@ public class AddSubjectForm extends javax.swing.JFrame {
     private javax.swing.JLabel labelTitle;
     private javax.swing.JLabel labelTotalLectures;
     private javax.swing.JLabel lableSubjectName;
-    private javax.swing.JTextField textAttendedLectures;
+    private javax.swing.JSpinner spinnerAttendedLectures;
+    private javax.swing.JSpinner spinnerTotalLectures;
     private javax.swing.JTextField textSubjectCode;
     private javax.swing.JTextField textSubjectName;
     private javax.swing.JTextField textSubjectProfessorName;
-    private javax.swing.JTextField textTotalLectures;
     // End of variables declaration//GEN-END:variables
 }

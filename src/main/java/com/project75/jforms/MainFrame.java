@@ -8,6 +8,8 @@ import com.project75.jpanels.SubjectCard;
 import com.project75.jpanels.subjectCardsHolderPanel;
 import javax.swing.JFrame;
 import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -36,7 +38,6 @@ public class MainFrame extends javax.swing.JFrame {
 
         panelAttendanceStats.setLayout(new java.awt.BorderLayout());
         panelAttendanceStats.add(scroll, java.awt.BorderLayout.CENTER);
-
     }
 
     @SuppressWarnings("unchecked")
@@ -61,10 +62,15 @@ public class MainFrame extends javax.swing.JFrame {
         listSecondaryList = new javax.swing.JList<>();
         buttonRemove = new javax.swing.JButton();
         buttonAdd = new javax.swing.JButton();
+        menuBar = new javax.swing.JMenuBar();
+        menuFile = new javax.swing.JMenu();
+        menuItemSave = new javax.swing.JMenuItem();
+        menuItemLoad = new javax.swing.JMenuItem();
+        menuItemQuit = new javax.swing.JMenuItem();
+        jMenu2 = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("MainFrame");
-        setMaximumSize(new java.awt.Dimension(1016, 580));
         setMinimumSize(new java.awt.Dimension(1016, 580));
         setResizable(false);
 
@@ -86,7 +92,6 @@ public class MainFrame extends javax.swing.JFrame {
         labelSubjects.setForeground(new java.awt.Color(255, 255, 255));
         labelSubjects.setText("Subjects");
 
-        buttonRemoveSubject.setBackground(new java.awt.Color(214, 48, 49));
         buttonRemoveSubject.setFont(new java.awt.Font("Exo 2 SemiBold", 1, 40)); // NOI18N
         buttonRemoveSubject.setForeground(new java.awt.Color(255, 255, 255));
         buttonRemoveSubject.setText("Remove Subject");
@@ -96,7 +101,6 @@ public class MainFrame extends javax.swing.JFrame {
             }
         });
 
-        buttonAddNewSubject.setBackground(new java.awt.Color(0, 184, 148));
         buttonAddNewSubject.setFont(new java.awt.Font("Exo 2 SemiBold", 1, 40)); // NOI18N
         buttonAddNewSubject.setForeground(new java.awt.Color(255, 255, 255));
         buttonAddNewSubject.setText("Add New Subject");
@@ -128,7 +132,7 @@ public class MainFrame extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(panelSubjectListLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(panelSubjectListLayout.createSequentialGroup()
-                        .addComponent(labelSubjects, javax.swing.GroupLayout.DEFAULT_SIZE, 61, Short.MAX_VALUE)
+                        .addComponent(labelSubjects, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(scrollPaneListScroll, javax.swing.GroupLayout.PREFERRED_SIZE, 460, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(panelSubjectListLayout.createSequentialGroup()
@@ -151,7 +155,7 @@ public class MainFrame extends javax.swing.JFrame {
         );
         panelAttendanceStatsLayout.setVerticalGroup(
             panelAttendanceStatsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 545, Short.MAX_VALUE)
+            .addGap(0, 534, Short.MAX_VALUE)
         );
 
         tabbedPane.addTab("Attendance Stats", panelAttendanceStats);
@@ -188,6 +192,11 @@ public class MainFrame extends javax.swing.JFrame {
 
         buttonSave.setFont(new java.awt.Font("Exo 2 SemiBold", 1, 36)); // NOI18N
         buttonSave.setText("Save");
+        buttonSave.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buttonSaveActionPerformed(evt);
+            }
+        });
 
         listSecondaryList.setFont(new java.awt.Font("Exo 2 SemiBold", 1, 14)); // NOI18N
         scrollPaneSecondaryList.setViewportView(listSecondaryList);
@@ -241,11 +250,42 @@ public class MainFrame extends javax.swing.JFrame {
                             .addComponent(buttonAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(buttonSave))
-                    .addComponent(scrollPaneTable, javax.swing.GroupLayout.DEFAULT_SIZE, 533, Short.MAX_VALUE))
+                    .addComponent(scrollPaneTable, javax.swing.GroupLayout.DEFAULT_SIZE, 522, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
         tabbedPane.addTab("Time Table", panelTimeTable);
+
+        menuFile.setText("File");
+
+        menuItemSave.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.CTRL_DOWN_MASK));
+        menuItemSave.setText("Save Data");
+        menuItemSave.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuItemSaveActionPerformed(evt);
+            }
+        });
+        menuFile.add(menuItemSave);
+
+        menuItemLoad.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_L, java.awt.event.InputEvent.CTRL_DOWN_MASK));
+        menuItemLoad.setText("Load Data");
+        menuItemLoad.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuItemLoadActionPerformed(evt);
+            }
+        });
+        menuFile.add(menuItemLoad);
+
+        menuItemQuit.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_Q, java.awt.event.InputEvent.CTRL_DOWN_MASK));
+        menuItemQuit.setText("Quit");
+        menuFile.add(menuItemQuit);
+
+        menuBar.add(menuFile);
+
+        jMenu2.setText("Edit");
+        menuBar.add(jMenu2);
+
+        setJMenuBar(menuBar);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -271,6 +311,7 @@ public class MainFrame extends javax.swing.JFrame {
         textAreaText.setText("");
         if (listSubjectLis.getSelectedIndex() != -1) {
             textAreaText.append("Removed Subject! ");
+            semester.removeSub(listSubjectLis.getSelectedValue());
             model.removeElementAt(listSubjectLis.getSelectedIndex());
         } else if (model.getSize() == 0) {  // if the list is empty
             textAreaText.append("List is Empty!");
@@ -298,27 +339,80 @@ public class MainFrame extends javax.swing.JFrame {
 
     }//GEN-LAST:event_tableTableMouseClicked
 
+    //  Time Table Add Button
     private void buttonAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonAddActionPerformed
-        if (listSecondaryList.getModel().getSize() == 0) {
+        if (listSecondaryList.getModel().getSize() == 0) {  //  check for subject list is empty or not
             System.out.println("List is Empty!");
             return;
-        } else if (listSecondaryList.getSelectedIndex() == -1) {
+        } else if (listSecondaryList.getSelectedIndex() == -1) {    //  if no subject is selected
             System.out.println("Please Select a Subject from the list");
             return;
         }
-
-        if(tableTable.getSelectedColumn()>5 || tableTable.getSelectedColumn()<0 || tableTable.getSelectedRow() > 10 || tableTable.getSelectedRow() < 0){
+        //  if no cell is selected from the table
+        if (tableTable.getSelectedColumn() > 5 || tableTable.getSelectedColumn() < 0 || tableTable.getSelectedRow() > 10 || tableTable.getSelectedRow() < 0) {
             System.out.println("Please select a cell in the table first.");
             return;
         }
-        
+
         tableTable.setValueAt(listSecondaryList.getModel().getElementAt(listSecondaryList.getSelectedIndex()), tableTable.getSelectedRow(), tableTable.getSelectedColumn());
     }//GEN-LAST:event_buttonAddActionPerformed
 
+    //  Time Table cell data remove button
     private void buttonRemoveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonRemoveActionPerformed
         tableTable.setValueAt(null, tableTable.getSelectedRow(), tableTable.getSelectedColumn());
     }//GEN-LAST:event_buttonRemoveActionPerformed
 
+    //  TODO: Remove this save button and add a simple calendar sort of thing in its place
+    private void buttonSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonSaveActionPerformed
+
+    }//GEN-LAST:event_buttonSaveActionPerformed
+
+    //  file menu save button clicked
+    private void menuItemSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemSaveActionPerformed
+        Project75.saveData(semester, tableTable);
+    }//GEN-LAST:event_menuItemSaveActionPerformed
+
+    //  file menu retrieve button clicked
+    private void menuItemLoadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemLoadActionPerformed
+        Project75.retriveData(this);
+        reload();
+    }//GEN-LAST:event_menuItemLoadActionPerformed
+
+    //  after retrieval of data reload the mainFrame Components
+    private void reload() {
+        model.clear();
+        cardsHolder.removeAll();
+
+        Subject[] subs = semester.getSubs();
+        
+        for (Subject s : subs) {
+            model.addElement(s);
+            cardsHolder.addCard(new SubjectCard(s));
+        }
+
+        cardsHolder.revalidate();
+        cardsHolder.repaint();
+    }
+
+    public void setTableModel(DefaultTableModel tableModel) {
+        tableTable.setModel(tableModel);
+
+        tableTable.setAutoCreateRowSorter(false);
+        tableTable.getTableHeader().setReorderingAllowed(false);
+
+        tableTable.revalidate();
+        tableTable.repaint();
+    }
+
+    public void setSemester(Semester sem) {
+        this.semester = sem;
+    }
+
+    public Semester getSemester() {
+        return this.semester;
+    }
+
+    //  used to add subject to list using addnewsubjectform
     public void addSubjectToList(Subject subject) {
 
         if (semester.hasSubject(subject.getSubCode())) {
@@ -339,9 +433,15 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JButton buttonRemove;
     private javax.swing.JButton buttonRemoveSubject;
     private javax.swing.JButton buttonSave;
+    private javax.swing.JMenu jMenu2;
     private javax.swing.JLabel labelSubjects;
     private javax.swing.JList<Subject> listSecondaryList;
     private javax.swing.JList<Subject> listSubjectLis;
+    private javax.swing.JMenuBar menuBar;
+    private javax.swing.JMenu menuFile;
+    private javax.swing.JMenuItem menuItemLoad;
+    private javax.swing.JMenuItem menuItemQuit;
+    private javax.swing.JMenuItem menuItemSave;
     private javax.swing.JPanel panelAttendanceStats;
     private javax.swing.JPanel panelSubjectList;
     private javax.swing.JPanel panelTimeTable;

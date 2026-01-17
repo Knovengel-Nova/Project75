@@ -26,8 +26,28 @@ public class Semester implements Serializable{
         return false;
     }
     
+    public void removeSub(Subject sub){
+        int i = -1;
+        for(i=0; i<subs.size(); i++){
+            if(subs.get(i).getSubCode().equalsIgnoreCase(sub.getSubCode())){
+                break;
+            }
+        }
+        subs.remove(i);
+        printArr();
+        
+    }
+    
+    public void printArr(){
+        System.out.println("");
+        for(Subject s: subs){
+            System.out.println(s);
+        }
+    }
+    
     public void addSub(Subject sub){
         subs.add(sub);
+        printArr();
     }
 
     public int getNoOfSubjects() {
@@ -56,5 +76,7 @@ public class Semester implements Serializable{
         this.sem = sem;
     }
     
-    
+    public void saveData(){
+        
+    }
 }
