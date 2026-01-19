@@ -10,6 +10,9 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.time.Month;
 import javax.swing.JTable;
 import javax.swing.UIManager;
 import javax.swing.table.DefaultTableModel;
@@ -19,15 +22,52 @@ import javax.swing.table.DefaultTableModel;
  * @author Aryan
  */
 public class Project75 {
+    private static LocalDate lD = LocalDate.now();
 
     public static void main(String[] args) {
         FlatDarkLaf.setup();
+        
+        
 
         java.awt.EventQueue.invokeLater(() -> {
             new MainFrame(3).setVisible(true);
         });
     }
 
+    public static String getDayOfTheWeek(){
+        
+        return lD.getDayOfWeek().toString();
+    }
+    
+    public static String getMonthOfTheYear(){
+        return lD.getMonth().toString();
+    }
+    
+    public static String getDateOfTheMonth(){
+        return (String)Integer.toString(lD.getDayOfMonth());
+    }
+    
+    public static String getYear(){
+        return Integer.toString(lD.getYear());
+    }
+    
+    public static int getDayOfTheWeekInt(){
+        int i=5;
+        
+        if(getDayOfTheWeek().equalsIgnoreCase(DayOfWeek.MONDAY.toString()))
+            i=0;
+        else if(getDayOfTheWeek().equalsIgnoreCase(DayOfWeek.TUESDAY.toString()))
+            i=1;
+        else if(getDayOfTheWeek().equalsIgnoreCase(DayOfWeek.WEDNESDAY.toString()))
+            i=2;
+        else if(getDayOfTheWeek().equalsIgnoreCase(DayOfWeek.THURSDAY.toString()))
+            i=3;
+        else if(getDayOfTheWeek().equalsIgnoreCase(DayOfWeek.FRIDAY.toString()))
+            i=4;
+        
+        return i;
+    }
+    
     public static void updateTheme(boolean dark) {
         try {
             if (dark) {

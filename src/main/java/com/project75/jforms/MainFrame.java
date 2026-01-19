@@ -5,6 +5,7 @@ import javax.swing.DefaultListModel;
 import com.project75.core.*;
 import com.project75.jpanels.SubjectCard;
 import com.project75.jpanels.subjectCardsHolderPanel;
+import java.util.ArrayList;
 import javax.swing.JScrollPane;
 import javax.swing.table.DefaultTableModel;
 
@@ -18,14 +19,27 @@ public class MainFrame extends javax.swing.JFrame {
     private subjectCardsHolderPanel cardsHolder;
     private Semester semester;
     private int semNo;
+    private int day;
+    private ArrayList<Subject> todaysSubject = new ArrayList<>();
 
     public MainFrame(int sem) {
+        
+        
         //  setting up the semester in MainFrame
         semester = new Semester(sem);
         this.semNo = sem;
-
+        day = Project75.getDayOfTheWeekInt();
+        
         initComponents();
 
+        initDaily();
+
+        //  initialze day date section
+        labelDateOfTheMonth.setText(Project75.getDateOfTheMonth());
+        labelDayOfTheWeek.setText(Project75.getDayOfTheWeek());
+        labelMonthOfTheYear.setText(Project75.getMonthOfTheYear());
+        labelYear.setText(Project75.getYear());
+        
         //  set model for listSubject list and listSecondaryList
         model = new DefaultListModel();
         listSubjectLis.setModel(model);
@@ -44,6 +58,31 @@ public class MainFrame extends javax.swing.JFrame {
         panelAttendanceStats.add(scroll, java.awt.BorderLayout.CENTER);
     }
 
+    private void initDaily(){
+        if(day>4)
+            return;
+        
+        DefaultTableModel tt = (DefaultTableModel)tableTable.getModel();
+        
+        Object obj;
+        
+        for(int i=0; i<tableTable.getModel().getRowCount(); i++){
+            if(tt.getValueAt(i, day) == null)
+                continue;
+            
+            obj = tt.getValueAt(i, day);
+            
+            if(obj instanceof Subject){
+                todaysSubject.add((Subject)obj);
+            }
+        }
+        
+        System.out.println("Todays Subjects: ");
+        for(Subject s : todaysSubject){
+            System.out.println(s);
+        }
+    }
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -61,11 +100,16 @@ public class MainFrame extends javax.swing.JFrame {
         panelTimeTable = new javax.swing.JPanel();
         scrollPaneTable = new javax.swing.JScrollPane();
         tableTable = new javax.swing.JTable();
-        buttonSave = new javax.swing.JButton();
         scrollPaneSecondaryList = new javax.swing.JScrollPane();
         listSecondaryList = new javax.swing.JList<>();
         buttonRemove = new javax.swing.JButton();
         buttonAdd = new javax.swing.JButton();
+        panelDayDate = new javax.swing.JPanel();
+        labelDayOfTheWeek = new javax.swing.JLabel();
+        labelDateOfTheMonth = new javax.swing.JLabel();
+        labelMonthOfTheYear = new javax.swing.JLabel();
+        labelYear = new javax.swing.JLabel();
+        panelDaily = new javax.swing.JPanel();
         menuBar = new javax.swing.JMenuBar();
         menuFile = new javax.swing.JMenu();
         menuItemSave = new javax.swing.JMenuItem();
@@ -194,14 +238,6 @@ public class MainFrame extends javax.swing.JFrame {
         });
         scrollPaneTable.setViewportView(tableTable);
 
-        buttonSave.setFont(new java.awt.Font("Exo 2 SemiBold", 1, 36)); // NOI18N
-        buttonSave.setText("Save");
-        buttonSave.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                buttonSaveActionPerformed(evt);
-            }
-        });
-
         listSecondaryList.setFont(new java.awt.Font("Exo 2 SemiBold", 1, 14)); // NOI18N
         scrollPaneSecondaryList.setViewportView(listSecondaryList);
 
@@ -221,6 +257,53 @@ public class MainFrame extends javax.swing.JFrame {
             }
         });
 
+        labelDayOfTheWeek.setFont(new java.awt.Font("Exo 2 Medium", 3, 24)); // NOI18N
+        labelDayOfTheWeek.setForeground(new java.awt.Color(255, 255, 255));
+        labelDayOfTheWeek.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        labelDayOfTheWeek.setText("SATURDAY");
+
+        labelDateOfTheMonth.setFont(new java.awt.Font("Exo 2 ExtraBold", 3, 128)); // NOI18N
+        labelDateOfTheMonth.setForeground(new java.awt.Color(255, 255, 255));
+        labelDateOfTheMonth.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        labelDateOfTheMonth.setText("17");
+
+        labelMonthOfTheYear.setFont(new java.awt.Font("Exo 2 Medium", 3, 40)); // NOI18N
+        labelMonthOfTheYear.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        labelMonthOfTheYear.setText("JANUARY");
+
+        labelYear.setFont(new java.awt.Font("Exo 2 SemiBold", 1, 36)); // NOI18N
+        labelYear.setText("2026");
+
+        javax.swing.GroupLayout panelDayDateLayout = new javax.swing.GroupLayout(panelDayDate);
+        panelDayDate.setLayout(panelDayDateLayout);
+        panelDayDateLayout.setHorizontalGroup(
+            panelDayDateLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelDayDateLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(panelDayDateLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(labelMonthOfTheYear, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(labelDayOfTheWeek, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addGroup(panelDayDateLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(labelYear, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(labelDateOfTheMonth, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap())
+        );
+        panelDayDateLayout.setVerticalGroup(
+            panelDayDateLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelDayDateLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(labelYear, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(panelDayDateLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(panelDayDateLayout.createSequentialGroup()
+                        .addComponent(labelDayOfTheWeek, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(labelMonthOfTheYear, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(labelDateOfTheMonth, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap())
+        );
+
         javax.swing.GroupLayout panelTimeTableLayout = new javax.swing.GroupLayout(panelTimeTable);
         panelTimeTable.setLayout(panelTimeTableLayout);
         panelTimeTableLayout.setHorizontalGroup(
@@ -233,12 +316,10 @@ public class MainFrame extends javax.swing.JFrame {
                     .addComponent(scrollPaneSecondaryList, javax.swing.GroupLayout.DEFAULT_SIZE, 397, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelTimeTableLayout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
-                        .addGroup(panelTimeTableLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(buttonSave, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelTimeTableLayout.createSequentialGroup()
-                                .addComponent(buttonAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(buttonRemove, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                        .addComponent(buttonAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(buttonRemove, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(panelDayDate, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         panelTimeTableLayout.setVerticalGroup(
@@ -252,17 +333,31 @@ public class MainFrame extends javax.swing.JFrame {
                         .addGroup(panelTimeTableLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(buttonRemove, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(buttonAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(buttonSave))
+                        .addGap(18, 18, 18)
+                        .addComponent(panelDayDate, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addComponent(scrollPaneTable, javax.swing.GroupLayout.DEFAULT_SIZE, 522, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
         tabbedPane.addTab("Time Table", panelTimeTable);
 
+        javax.swing.GroupLayout panelDailyLayout = new javax.swing.GroupLayout(panelDaily);
+        panelDaily.setLayout(panelDailyLayout);
+        panelDailyLayout.setHorizontalGroup(
+            panelDailyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 1016, Short.MAX_VALUE)
+        );
+        panelDailyLayout.setVerticalGroup(
+            panelDailyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 534, Short.MAX_VALUE)
+        );
+
+        tabbedPane.addTab("Daily ", panelDaily);
+
         menuFile.setText("File");
 
         menuItemSave.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.CTRL_DOWN_MASK));
+        menuItemSave.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/project75/images/save.png"))); // NOI18N
         menuItemSave.setText("Save Data");
         menuItemSave.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -272,6 +367,7 @@ public class MainFrame extends javax.swing.JFrame {
         menuFile.add(menuItemSave);
 
         menuItemLoad.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_L, java.awt.event.InputEvent.CTRL_DOWN_MASK));
+        menuItemLoad.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/project75/images/sync.png"))); // NOI18N
         menuItemLoad.setText("Load Data");
         menuItemLoad.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -281,7 +377,13 @@ public class MainFrame extends javax.swing.JFrame {
         menuFile.add(menuItemLoad);
 
         menuItemQuit.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_Q, java.awt.event.InputEvent.CTRL_DOWN_MASK));
+        menuItemQuit.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/project75/images/quit.png"))); // NOI18N
         menuItemQuit.setText("Quit");
+        menuItemQuit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuItemQuitActionPerformed(evt);
+            }
+        });
         menuFile.add(menuItemQuit);
 
         menuBar.add(menuFile);
@@ -340,7 +442,6 @@ public class MainFrame extends javax.swing.JFrame {
 
     public void removeSubjectFromTable(Subject temp) {
         DefaultTableModel model = (DefaultTableModel) tableTable.getModel();
-
         for (int row = 0; row < model.getRowCount(); row++) {
             for (int col = 0; col < model.getColumnCount(); col++) {
 
@@ -401,11 +502,6 @@ public class MainFrame extends javax.swing.JFrame {
         tableTable.setValueAt(null, tableTable.getSelectedRow(), tableTable.getSelectedColumn());
     }//GEN-LAST:event_buttonRemoveActionPerformed
 
-    //  TODO: Remove this save button and add a simple calendar sort of thing in its place
-    private void buttonSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonSaveActionPerformed
-
-    }//GEN-LAST:event_buttonSaveActionPerformed
-
     //  file menu save button clicked
     private void menuItemSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemSaveActionPerformed
         Project75.saveData(semester, tableTable);
@@ -416,6 +512,10 @@ public class MainFrame extends javax.swing.JFrame {
         Project75.retriveData(this);
         reload();
     }//GEN-LAST:event_menuItemLoadActionPerformed
+
+    private void menuItemQuitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemQuitActionPerformed
+        System.exit(0);
+    }//GEN-LAST:event_menuItemQuitActionPerformed
 
     //  after retrieval of data reload the mainFrame Components
     private void reload() {
@@ -436,6 +536,8 @@ public class MainFrame extends javax.swing.JFrame {
 
         cardsHolder.revalidate();
         cardsHolder.repaint();
+        
+        initDaily();
     }
 
     //  set Teable model to the given table model
@@ -477,9 +579,12 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JButton buttonAddNewSubject;
     private javax.swing.JButton buttonRemove;
     private javax.swing.JButton buttonRemoveSubject;
-    private javax.swing.JButton buttonSave;
     private javax.swing.JMenu jMenu2;
+    private javax.swing.JLabel labelDateOfTheMonth;
+    private javax.swing.JLabel labelDayOfTheWeek;
+    private javax.swing.JLabel labelMonthOfTheYear;
     private javax.swing.JLabel labelSubjects;
+    private javax.swing.JLabel labelYear;
     private javax.swing.JList<Subject> listSecondaryList;
     private javax.swing.JList<Subject> listSubjectLis;
     private javax.swing.JMenuBar menuBar;
@@ -488,6 +593,8 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JMenuItem menuItemQuit;
     private javax.swing.JMenuItem menuItemSave;
     private javax.swing.JPanel panelAttendanceStats;
+    private javax.swing.JPanel panelDaily;
+    private javax.swing.JPanel panelDayDate;
     private javax.swing.JPanel panelSubjectList;
     private javax.swing.JPanel panelTimeTable;
     private javax.swing.JScrollPane scrollPaneListScroll;
