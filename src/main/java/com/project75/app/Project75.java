@@ -1,8 +1,7 @@
 package com.project75.app;
 
 import com.formdev.flatlaf.FlatDarkLaf;
-import com.formdev.flatlaf.FlatLaf;
-import com.formdev.flatlaf.FlatLightLaf;
+import com.project75.core.Data;
 import com.project75.core.Semester;
 import com.project75.core.TimeTableData;
 import com.project75.jforms.MainFrame;
@@ -12,9 +11,8 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.time.Month;
+import java.util.Scanner;
 import javax.swing.JTable;
-import javax.swing.UIManager;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -22,66 +20,118 @@ import javax.swing.table.DefaultTableModel;
  * @author Aryan
  */
 public class Project75 {
-    private static LocalDate lD = LocalDate.now();
 
+    private static LocalDate lD = LocalDate.now();
+    private static Scanner sc = new Scanner(System.in);
+    private static Data data;
+    private static Project75 inst;
+    private static SignIn si;
+    private static SignUp su;
+    
+    public static void sISU(){
+        System.out.println("Enter Type: ");
+        int ch = sc.nextInt();
+        
+        if(ch == 0){
+            si = new SignIn(inst);
+            si.setVisible(true);
+        }else{
+            su = new SignUp(inst);
+            su.setVisible(true);
+        }
+    }
+
+    public Project75() {
+        inst = this;
+    }
+    
     public static void main(String[] args) {
         FlatDarkLaf.setup();
-        
-        
-
-        java.awt.EventQueue.invokeLater(() -> {
-            new MainFrame(3).setVisible(true);
-        });
+        inst = new Project75();
+        sISU();
     }
 
-    public static String getDayOfTheWeek(){
-        
+    public Data getData() {
+        return data;
+    }
+    
+
+    public void setData(Data data) {
+        this.data = data;
+    }
+
+    public static String getDayOfTheWeek() {
+
         return lD.getDayOfWeek().toString();
     }
-    
-    public static String getMonthOfTheYear(){
+
+    public static String getMonthOfTheYear() {
         return lD.getMonth().toString();
     }
-    
-    public static String getDateOfTheMonth(){
-        return (String)Integer.toString(lD.getDayOfMonth());
+
+    public static String getDateOfTheMonth() {
+        return (String) Integer.toString(lD.getDayOfMonth());
     }
-    
-    public static String getYear(){
+
+    public static String getYear() {
         return Integer.toString(lD.getYear());
     }
-    
-    public static int getDayOfTheWeekInt(){
-        int i=5;
-        
-        if(getDayOfTheWeek().equalsIgnoreCase(DayOfWeek.MONDAY.toString()))
-            i=0;
-        else if(getDayOfTheWeek().equalsIgnoreCase(DayOfWeek.TUESDAY.toString()))
-            i=1;
-        else if(getDayOfTheWeek().equalsIgnoreCase(DayOfWeek.WEDNESDAY.toString()))
-            i=2;
-        else if(getDayOfTheWeek().equalsIgnoreCase(DayOfWeek.THURSDAY.toString()))
-            i=3;
-        else if(getDayOfTheWeek().equalsIgnoreCase(DayOfWeek.FRIDAY.toString()))
-            i=4;
-        
-        return i;
-    }
-    
-    public static void updateTheme(boolean dark) {
-        try {
-            if (dark) {
-                UIManager.setLookAndFeel(new FlatDarkLaf());
-            } else {
-                UIManager.setLookAndFeel(new FlatLightLaf());
-            }
 
-            FlatLaf.updateUI();
+    public static int getDayOfTheWeekInt() {
+        int i = 5;
 
-        } catch (Exception ex) {
-            ex.printStackTrace();
+        if (getDayOfTheWeek().equalsIgnoreCase(DayOfWeek.MONDAY.toString())) {
+            i = 0;
+        } else if (getDayOfTheWeek().equalsIgnoreCase(DayOfWeek.TUESDAY.toString())) {
+            i = 1;
+        } else if (getDayOfTheWeek().equalsIgnoreCase(DayOfWeek.WEDNESDAY.toString())) {
+            i = 2;
+        } else if (getDayOfTheWeek().equalsIgnoreCase(DayOfWeek.THURSDAY.toString())) {
+            i = 3;
+        } else if (getDayOfTheWeek().equalsIgnoreCase(DayOfWeek.FRIDAY.toString())) {
+            i = 4;
         }
 
+        return i;
+    }
+
+    public static void saveDataFile(Data data){
+        String folderPath = "saves";
+        new java.io.File(folderPath).mkdirs();
+        
+        String fileName = "_DATA"+data.getStudent().getStuUID()+".ser";
+        
+        try{
+            FileOutputStream fos = new FileOutputStream(folderPath+"/"+fileName);
+            ObjectOutputStream oos = new ObjectOutputStream(fos);
+            
+            oos.writeObject(data);
+            System.out.println(fileName+" Succesfully saved in "+folderPath);
+            
+            fos.close();
+            oos.close();
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+    }
+    
+    public static void retrieveSaveDataFile(Project75 parent){
+        String folderPath = "saves";
+        String fileName = "_DATA"+parent.getData().getStudent().getStuUID()+".ser";
+        
+        try{
+            FileInputStream fis = new FileInputStream(folderPath+"/"+fileName);
+            ObjectInputStream ois = new ObjectInputStream(fis);
+            
+            Data temp = (Data)ois.readObject();
+            System.out.println(fileName+" Retrieved Successfully!");
+            parent.setData(temp);
+            
+            fis.close();
+            ois.close();            
+        }catch(Exception e){
+            e.printStackTrace();
+        }
     }
 
     public static void saveData(Semester sem, JTable table) {

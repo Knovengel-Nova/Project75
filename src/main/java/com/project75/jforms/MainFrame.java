@@ -15,23 +15,49 @@ import javax.swing.table.DefaultTableModel;
  */
 public class MainFrame extends javax.swing.JFrame {
 
-    private DefaultListModel<Subject> model;
-    private subjectCardsHolderPanel cardsHolder;
-    private Semester semester;
-    private int semNo;
-    private int day;
+    private final subjectCardsHolderPanel cardsHolder;
+    private final int day;
+
+    private Data data;
+    private final Project75 parent;
+
+    private DefaultListModel<Subject> listModel;
+    private DefaultTableModel tableModel;
+
     private ArrayList<Subject> todaysSubject = new ArrayList<>();
 
-    public MainFrame(int sem) {
-        
-        
-        //  setting up the semester in MainFrame
-        semester = new Semester(sem);
-        this.semNo = sem;
+    private void init() {
+
+        this.data = parent.getData();
+        this.listModel = new DefaultListModel<>();
+
+        if (this.data.getTimetableData() == null) {
+            this.tableModel = new DefaultTableModel(new Object[10][5], new String[]{"Monday", "Tuesday", "Wednesday", "Thursday", "Friday"});
+        } else {
+            this.tableModel = new DefaultTableModel(this.data.getTimetableData(), this.data.getTimetableColumns());
+        }
+        tableTable.setModel(tableModel);
+
+        if (this.data.getListData() != null) {
+            for (int i = 0; i < this.data.getListData().length; i++) {
+                listModel.addElement(this.data.getListData()[i]);
+            }
+        }
+
+        //  set model for listSubject list and listSecondaryList
+        listSubjectLis.setModel(listModel);
+        listSecondaryList.setModel(listModel);
+    }
+
+    public MainFrame(Project75 parent) {
+
+        //  data retrieval
+        this.parent = parent;
         day = Project75.getDayOfTheWeekInt();
-        
+
         initComponents();
 
+        init();
         initDaily();
 
         //  initialze day date section
@@ -39,14 +65,11 @@ public class MainFrame extends javax.swing.JFrame {
         labelDayOfTheWeek.setText(Project75.getDayOfTheWeek());
         labelMonthOfTheYear.setText(Project75.getMonthOfTheYear());
         labelYear.setText(Project75.getYear());
-        
-        //  set model for listSubject list and listSecondaryList
-        model = new DefaultListModel();
-        listSubjectLis.setModel(model);
-        listSecondaryList.setModel(model);
 
         //  set the CardHolder Panel
         cardsHolder = new subjectCardsHolderPanel();
+
+        loadSubjectCards();
 
         //  set up scroll panel for SubjectCards
         JScrollPane scroll = new JScrollPane(cardsHolder);
@@ -56,33 +79,36 @@ public class MainFrame extends javax.swing.JFrame {
         //  set border layout to accomodate Subject cards in 3xN form
         panelAttendanceStats.setLayout(new java.awt.BorderLayout());
         panelAttendanceStats.add(scroll, java.awt.BorderLayout.CENTER);
+
     }
 
-    private void initDaily(){
-        if(day>4)
+    private void initDaily() {
+        if (day > 4) {
             return;
-        
-        DefaultTableModel tt = (DefaultTableModel)tableTable.getModel();
-        
+        }
+
+        DefaultTableModel tt = tableModel;
+
         Object obj;
-        
-        for(int i=0; i<tableTable.getModel().getRowCount(); i++){
-            if(tt.getValueAt(i, day) == null)
+
+        for (int i = 0; i < tt.getRowCount(); i++) {
+            if (tt.getValueAt(i, day) == null) {
                 continue;
-            
+            }
+
             obj = tt.getValueAt(i, day);
-            
-            if(obj instanceof Subject){
-                todaysSubject.add((Subject)obj);
+
+            if (obj instanceof Subject) {
+                todaysSubject.add((Subject) obj);
             }
         }
-        
+
         System.out.println("Todays Subjects: ");
-        for(Subject s : todaysSubject){
+        for (Subject s : todaysSubject) {
             System.out.println(s);
         }
     }
-    
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -420,20 +446,20 @@ public class MainFrame extends javax.swing.JFrame {
 
         if (listSubjectLis.getSelectedIndex() != -1) {
             textAreaText.append("Removed Subject! ");
-            Subject temp = model.getElementAt(listSubjectLis.getSelectedIndex());
+            Subject temp = listModel.getElementAt(listSubjectLis.getSelectedIndex());
 
             //  remove from Subject Cards
-            cardsHolder.removeCard(temp, semester.getNoOfSubjects());
+            cardsHolder.removeCard(temp, data.getSemester().getNoOfSubjects());
 
             //  remove subject from time table
             removeSubjectFromTable(temp);
 
             //  remove from semester class subjects array
-            semester.removeSub(temp);
+            data.getSemester().removeSub(temp);
 
             //  remove from the model
-            model.removeElementAt(listSubjectLis.getSelectedIndex());
-        } else if (model.getSize() == 0) {  // if the list is empty
+            listModel.removeElementAt(listSubjectLis.getSelectedIndex());
+        } else if (listModel.getSize() == 0) {  // if the list is empty
             textAreaText.append("List is Empty!");
         } else {     //if no student is selected
             textAreaText.append("Please select a Subject!");
@@ -441,7 +467,7 @@ public class MainFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_buttonRemoveSubjectActionPerformed
 
     public void removeSubjectFromTable(Subject temp) {
-        DefaultTableModel model = (DefaultTableModel) tableTable.getModel();
+        DefaultTableModel model = tableModel;
         for (int row = 0; row < model.getRowCount(); row++) {
             for (int col = 0; col < model.getColumnCount(); col++) {
 
@@ -467,7 +493,7 @@ public class MainFrame extends javax.swing.JFrame {
         }
 
         textAreaText.setText("");
-        Subject temp = semester.getSubject(listSubjectLis.getSelectedIndex());
+        Subject temp = data.getSemester().getSubject(listSubjectLis.getSelectedIndex());
         String str
                 = "Subject Code: " + temp.getSubCode() + "\n"
                 + "Subject: " + temp.getSubName() + "\n"
@@ -481,7 +507,7 @@ public class MainFrame extends javax.swing.JFrame {
 
     //  Time Table Add Button
     private void buttonAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonAddActionPerformed
-        if (listSecondaryList.getModel().getSize() == 0) {  //  check for subject list is empty or not
+        if (listModel.getSize() == 0) {  //  check for subject list is empty or not
             System.out.println("List is Empty!");
             return;
         } else if (listSecondaryList.getSelectedIndex() == -1) {    //  if no subject is selected
@@ -494,7 +520,7 @@ public class MainFrame extends javax.swing.JFrame {
             return;
         }
 
-        tableTable.setValueAt(listSecondaryList.getModel().getElementAt(listSecondaryList.getSelectedIndex()), tableTable.getSelectedRow(), tableTable.getSelectedColumn());
+        tableTable.setValueAt(listModel.getElementAt(listSecondaryList.getSelectedIndex()), tableTable.getSelectedRow(), tableTable.getSelectedColumn());
     }//GEN-LAST:event_buttonAddActionPerformed
 
     //  Time Table cell data remove button
@@ -504,12 +530,40 @@ public class MainFrame extends javax.swing.JFrame {
 
     //  file menu save button clicked
     private void menuItemSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemSaveActionPerformed
-        Project75.saveData(semester, tableTable);
+        saveUIToData();
+        parent.setData(data);
+        Project75.saveDataFile(data);
     }//GEN-LAST:event_menuItemSaveActionPerformed
+
+    private void saveUIToData() {
+        Subject[] lsData = new Subject[listModel.getSize()];
+        for (int i = 0; i < lsData.length; i++) {
+            lsData[i] = listModel.getElementAt(i);
+        }
+        data.setListData(lsData);
+
+        int r = tableModel.getRowCount();
+        int c = tableModel.getColumnCount();
+
+        Subject[][] tbData = new Subject[r][c];
+        for (int i = 0; i < r; i++) {
+            for (int j = 0; j < c; j++) {
+                Object val = tableModel.getValueAt(i, j);
+                if (val instanceof Subject) {
+                    tbData[i][j] = (Subject) val;
+                } else {
+                    tbData[i][j] = null;
+                }
+            }
+        }
+        data.setTimetableData(tbData);
+        data.setTimetableColumns(new String[]{"Monday", "Tuesday", "Wednesday", "Thursday", "Friday"});
+    }
 
     //  file menu retrieve button clicked
     private void menuItemLoadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemLoadActionPerformed
-        Project75.retriveData(this);
+        Project75.retrieveSaveDataFile(parent);
+        this.data = parent.getData();
         reload();
     }//GEN-LAST:event_menuItemLoadActionPerformed
 
@@ -519,58 +573,65 @@ public class MainFrame extends javax.swing.JFrame {
 
     //  after retrieval of data reload the mainFrame Components
     private void reload() {
-        model.clear();  //  clear list model
-        cardsHolder.removeAll();    //  card holder panel remove all
 
-        Subject[] subs = semester.getSubs();    //  get all subjects
+        listModel.clear();
 
-        for (Subject s : subs) {
-            model.addElement(s);
-            cardsHolder.addCard(new SubjectCard(s));
+        if (data.getListData() != null) {
+            for (Subject s : data.getListData()) {
+                listModel.addElement(s);
+            }
         }
 
-        listSubjectLis.revalidate();
-        listSecondaryList.revalidate();
-        listSubjectLis.repaint();
-        listSecondaryList.repaint();
+        tableModel.setDataVector(data.getTimetableData(),data.getTimetableColumns());
 
-        cardsHolder.revalidate();
-        cardsHolder.repaint();
-        
+        loadSubjectCards();
         initDaily();
     }
 
     //  set Teable model to the given table model
     public void setTableModel(DefaultTableModel tableModel) {
+        this.tableModel = tableModel;
         tableTable.setModel(tableModel);
-
         tableTable.setAutoCreateRowSorter(false);
         tableTable.getTableHeader().setReorderingAllowed(false);
-
         tableTable.revalidate();
         tableTable.repaint();
     }
 
     public void setSemester(Semester sem) {
-        this.semester = sem;
+        data.setSemester(sem);
     }
 
     public Semester getSemester() {
-        return this.semester;
+        return data.getSemester();
+    }
+
+    private void loadSubjectCards() {
+        cardsHolder.removeAll();
+
+        if (data.getListData() == null) {
+            return;
+        }
+
+        for (Subject s : data.getListData()) {
+            cardsHolder.addCard(new SubjectCard(s));
+        }
+
+        cardsHolder.revalidate();
+        cardsHolder.repaint();
     }
 
     //  used to add subject to list using addnewsubjectform
     public void addSubjectToList(Subject subject) {
 
-        if (semester.hasSubject(subject.getSubCode())) {
+        if (data.getSemester().hasSubject(subject.getSubCode())) {
             textAreaText.setText("Subject Already present in Subject List!");
             return;
         }
-        model.addElement(subject);
-        semester.addSub(subject);
+        listModel.addElement(subject);
+        data.getSemester().addSub(subject);
         cardsHolder.addCard(new SubjectCard(subject));
         textAreaText.setText("New Subject added!");
-
     }
 
 
