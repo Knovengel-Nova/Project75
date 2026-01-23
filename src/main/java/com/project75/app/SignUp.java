@@ -4,6 +4,8 @@ import com.project75.core.Data;
 import com.project75.core.Semester;
 import com.project75.core.Student;
 import com.project75.core.Subject;
+import com.project75.core.Utility;
+import com.project75.core.Verifier;
 import com.project75.jforms.MainFrame;
 import java.io.FileOutputStream;
 import java.io.ObjectOutputStream;
@@ -14,11 +16,10 @@ import java.io.ObjectOutputStream;
  */
 public class SignUp extends javax.swing.JFrame {
 
-    private Project75 parent;
+    private Student newStudent;
 
-    public SignUp(Project75 parent) {
+    public SignUp() {
         initComponents();
-        this.parent = parent;
         textStudentBatch.setText("");
         textStudentBranch.setText("");
         textStudentDivision.setText("");
@@ -27,6 +28,7 @@ public class SignUp extends javax.swing.JFrame {
         textStudentUID.setText("");
         passwordPassword.setText("");
         passwordConfirmPassword.setText("");
+        textStudentName.requestFocus();
     }
 
     @SuppressWarnings("unchecked")
@@ -51,9 +53,11 @@ public class SignUp extends javax.swing.JFrame {
         labelStudentSemester = new javax.swing.JLabel();
         labelSignUpHeading = new javax.swing.JLabel();
         buttonSignUp = new javax.swing.JButton();
+        buttonMenu = new javax.swing.JButton();
+        separatorTitle = new javax.swing.JSeparator();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("Sign Up");
+        setTitle("Project75 - SignUp");
         setResizable(false);
 
         labelStudentName.setFont(new java.awt.Font("Exo 2 SemiBold", 1, 18)); // NOI18N
@@ -113,6 +117,17 @@ public class SignUp extends javax.swing.JFrame {
             }
         });
 
+        buttonMenu.setFont(new java.awt.Font("Exo 2 SemiBold", 1, 14)); // NOI18N
+        buttonMenu.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/project75/images/home.png"))); // NOI18N
+        buttonMenu.setText("Menu");
+        buttonMenu.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        buttonMenu.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        buttonMenu.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buttonMenuActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -120,40 +135,50 @@ public class SignUp extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(labelSignUpHeading, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(separatorTitle)
+                        .addContainerGap())
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(buttonMenu, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(labelSignUpHeading, javax.swing.GroupLayout.PREFERRED_SIZE, 358, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(106, 106, 106))
+                    .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                             .addComponent(labelPassword, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(labelConfirmPassword, javax.swing.GroupLayout.DEFAULT_SIZE, 168, Short.MAX_VALUE)
+                            .addComponent(labelConfirmPassword, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(labelStudentSemester, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(labelStudentBranch, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(labelStudentBatch, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(labelStudentDivision, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(labelStudentUID, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(labelStudentName, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(labelStudentName, javax.swing.GroupLayout.PREFERRED_SIZE, 197, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(textStudentName, javax.swing.GroupLayout.DEFAULT_SIZE, 378, Short.MAX_VALUE)
+                            .addComponent(textStudentName)
                             .addComponent(textStudentUID)
                             .addComponent(textStudentDivision)
                             .addComponent(textStudentBatch)
                             .addComponent(textStudentBranch)
                             .addComponent(textStudentSemester)
                             .addComponent(passwordPassword)
-                            .addComponent(passwordConfirmPassword))))
-                .addContainerGap())
+                            .addComponent(passwordConfirmPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 378, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(0, 6, Short.MAX_VALUE))))
             .addGroup(layout.createSequentialGroup()
-                .addGap(136, 136, 136)
+                .addGap(140, 140, 140)
                 .addComponent(buttonSignUp, javax.swing.GroupLayout.PREFERRED_SIZE, 299, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(135, Short.MAX_VALUE))
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(labelSignUpHeading, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(labelSignUpHeading, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(buttonMenu))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(separatorTitle, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(textStudentName)
                     .addComponent(labelStudentName, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -185,9 +210,9 @@ public class SignUp extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(labelConfirmPassword, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(passwordConfirmPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 36, Short.MAX_VALUE)
                 .addComponent(buttonSignUp, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(23, Short.MAX_VALUE))
+                .addGap(27, 27, 27))
         );
 
         pack();
@@ -199,28 +224,52 @@ public class SignUp extends javax.swing.JFrame {
     }//GEN-LAST:event_textStudentBatchActionPerformed
 
     private void buttonSignUpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonSignUpActionPerformed
-        Student std = new Student(textStudentName.getText(), Integer.parseInt(textStudentUID.getText()), textStudentDivision.getText().charAt(0), textStudentBatch.getText().charAt(0), textStudentBranch.getText(), passwordPassword.getPassword());
+        
+        //  create a student with the inputed data.
+        newStudent = new Student(textStudentName.getText(), Integer.parseInt(textStudentUID.getText()), textStudentDivision.getText().charAt(0), textStudentBatch.getText().charAt(0), textStudentBranch.getText(), passwordPassword.getPassword());
         Semester sem = new Semester(Integer.parseInt(textStudentSemester.getText()));
+        newStudent.setSemester(sem);
 
+        //  main data fields
         Subject[][] timeTableData = new Subject[10][5];
         Subject[] listData = new Subject[0];
-
         String[] tableColumns = {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday"};
+        
+        //  create data class for student
+        Data data = new Data(sem, timeTableData, tableColumns, listData);
+        newStudent.setStudentData(data);
+        
 
-        Data d = new Data(std, sem, timeTableData, tableColumns, listData);
-        parent.setData(d);
-
-        String folderPath = "saves";
+        //  actual saving of .ser file
+        String folderPath = "saves/"+newStudent.getStuUID();
         new java.io.File(folderPath).mkdirs();
 
-        String fileName = "_DATA" + this.textStudentUID.getText() + ".ser";
-
+        //  DATA file
+        String fileName = "_"+newStudent.getStuUID()+"_DATA.ser";
+        
         try {
             FileOutputStream fos = new FileOutputStream(folderPath + "/" + fileName);
             ObjectOutputStream oos = new ObjectOutputStream(fos);
 
-            oos.writeObject(d);
-            System.out.println(fileName + " Succesfully saved in " + folderPath);
+            oos.writeObject(newStudent);
+            System.out.println(fileName + " for "+newStudent.getStuName()+" Succesfully saved in " + folderPath);
+
+            fos.close();
+            oos.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        
+        //  VERIFIER file
+        Verifier verifier = new Verifier(Integer.toString(newStudent.getStuUID()), newStudent.getSalt(), newStudent.getPasswordHash());
+        fileName = "_"+newStudent.getStuUID()+"_VERIFIER.ser";
+        
+        try {
+            FileOutputStream fos = new FileOutputStream(folderPath + "/" + fileName);
+            ObjectOutputStream oos = new ObjectOutputStream(fos);
+
+            oos.writeObject(verifier);
+            System.out.println(fileName + " for "+newStudent.getStuName()+" Succesfully saved in " + folderPath);
 
             fos.close();
             oos.close();
@@ -229,12 +278,20 @@ public class SignUp extends javax.swing.JFrame {
         }
 
         java.awt.EventQueue.invokeLater(() -> {
-            new MainFrame(parent).setVisible(true);
+            new MainFrame(newStudent).setVisible(true);
         });
         this.dispose();
     }//GEN-LAST:event_buttonSignUpActionPerformed
 
+    private void buttonMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonMenuActionPerformed
+        // TODO add your handling code here:
+        Menu menu = new Menu();
+        menu.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_buttonMenuActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton buttonMenu;
     private javax.swing.JButton buttonSignUp;
     private javax.swing.JLabel labelConfirmPassword;
     private javax.swing.JLabel labelPassword;
@@ -247,6 +304,7 @@ public class SignUp extends javax.swing.JFrame {
     private javax.swing.JLabel labelStudentUID;
     private javax.swing.JPasswordField passwordConfirmPassword;
     private javax.swing.JPasswordField passwordPassword;
+    private javax.swing.JSeparator separatorTitle;
     private javax.swing.JTextField textStudentBatch;
     private javax.swing.JTextField textStudentBranch;
     private javax.swing.JTextField textStudentDivision;

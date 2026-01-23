@@ -1,11 +1,6 @@
 package com.project75.core;
 
 import java.io.Serializable;
-import java.security.SecureRandom;
-import java.security.spec.KeySpec;
-import java.util.Base64;
-import javax.crypto.SecretKeyFactory;
-import javax.crypto.spec.PBEKeySpec;
 
 /**
  *
@@ -20,6 +15,32 @@ public class Student implements Serializable {
     private String stuBranch;
     private String salt;
     private String passwordHash;
+    private Data studentData;
+    private Semester semester;
+
+    public Semester getSemester() {
+        return semester;
+    }
+
+    public void setSemester(Semester semester) {
+        this.semester = semester;
+    }
+
+    public void setSalt(String salt) {
+        this.salt = salt;
+    }
+
+    public String getPasswordHash() {
+        return passwordHash;
+    }
+
+    public Data getStudentData() {
+        return studentData;
+    }
+
+    public void setStudentData(Data studentData) {
+        this.studentData = studentData;
+    }
 
     public String getStuName() {
         return stuName;
@@ -41,48 +62,18 @@ public class Student implements Serializable {
         return stuBranch;
     }
 
+    public String getSalt() {
+        return salt;
+    }
+
     private void hash(char[] password) {
-        try {
-            // Generating salt
-            byte[] saltBytes = new byte[16];
-            SecureRandom random = new SecureRandom();
-            random.nextBytes(saltBytes);
-            this.salt = Base64.getEncoder().encodeToString(saltBytes);
-
-            // PBKDF2 hash
-            KeySpec spec = new PBEKeySpec(password, saltBytes, 65_536, 256);
-
-            SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256");
-
-            byte[] hashBytes = factory.generateSecret(spec).getEncoded();
-            this.passwordHash = Base64.getEncoder().encodeToString(hashBytes);
-
-            java.util.Arrays.fill(password, '\0');
-
-        } catch (Exception e) {
-            throw new RuntimeException("Password hashing failed", e);
-        }
+        this.salt = Utility.createSalt();
+        this.passwordHash = Utility.getHashedPassword(password, salt);
     }
 
     public boolean verifyPassword(char[] passwordAttempt) {
-        try {
-            byte[] saltBytes = Base64.getDecoder().decode(this.salt);
-
-            KeySpec spec = new PBEKeySpec(passwordAttempt, saltBytes, 65_536, 256);
-
-            SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256");
-
-            byte[] hashAttempt = factory.generateSecret(spec).getEncoded();
-
-            String attemptHash = Base64.getEncoder().encodeToString(hashAttempt);
-
-            java.util.Arrays.fill(passwordAttempt, '\0');
-
-            return attemptHash.equals(this.passwordHash);
-
-        } catch (Exception e) {
-            return false;
-        }
+        String attemptHash = Utility.getHashedPassword(passwordAttempt, salt);
+        return attemptHash.equals(this.passwordHash);
     }
 
     @Override

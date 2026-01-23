@@ -23,12 +23,11 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Group type="102" alignment="1" attributes="0">
+          <Group type="102" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="1" attributes="0">
-                  <Component id="labelSubjectName" max="32767" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Component id="labelSubjectName" alignment="1" max="32767" attributes="0"/>
                   <Component id="progBarPercent" alignment="0" max="32767" attributes="0"/>
-                  <Component id="buttonAttending" alignment="0" max="32767" attributes="0"/>
                   <Group type="102" alignment="0" attributes="0">
                       <Component id="labelPercent" min="-2" pref="80" max="-2" attributes="0"/>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
@@ -37,14 +36,19 @@
                           <Component id="labelDate" max="32767" attributes="0"/>
                       </Group>
                   </Group>
-                  <Component id="labelProfessorName" max="32767" attributes="0"/>
+                  <Component id="labelProfessorName" alignment="1" max="32767" attributes="0"/>
+                  <Component id="labelLectures" alignment="1" max="32767" attributes="0"/>
                   <Group type="102" alignment="0" attributes="0">
-                      <Component id="buttonMissing" min="-2" pref="160" max="-2" attributes="0"/>
+                      <Component id="buttonAttending" min="-2" pref="160" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="buttonChangeLecture" min="-2" pref="160" max="-2" attributes="0"/>
                       <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                   </Group>
-                  <Component id="labelLectures" max="32767" attributes="0"/>
+                  <Group type="102" alignment="0" attributes="0">
+                      <Component id="buttonMissing" min="-2" pref="160" max="-2" attributes="0"/>
+                      <EmptySpace max="32767" attributes="0"/>
+                      <Component id="buttonCanceled" min="-2" pref="160" max="-2" attributes="0"/>
+                  </Group>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
@@ -71,12 +75,15 @@
               <EmptySpace pref="18" max="32767" attributes="0"/>
               <Component id="labelLectures" min="-2" max="-2" attributes="0"/>
               <EmptySpace type="separate" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="buttonMissing" alignment="3" min="-2" pref="50" max="-2" attributes="0"/>
-                  <Component id="buttonChangeLecture" alignment="3" min="-2" pref="50" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Component id="buttonChangeLecture" min="-2" pref="50" max="-2" attributes="0"/>
+                  <Component id="buttonAttending" min="-2" pref="50" max="-2" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
-              <Component id="buttonAttending" min="-2" pref="50" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="buttonMissing" alignment="3" min="-2" pref="50" max="-2" attributes="0"/>
+                  <Component id="buttonCanceled" alignment="3" min="-2" pref="50" max="-2" attributes="0"/>
+              </Group>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
       </Group>
@@ -112,6 +119,9 @@
         </Property>
         <Property name="text" type="java.lang.String" value="Attending"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="buttonAttendingActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JLabel" name="labelPercent">
       <Properties>
@@ -168,6 +178,17 @@
         <Property name="horizontalAlignment" type="int" value="0"/>
         <Property name="text" type="java.lang.String" value="9/12"/>
       </Properties>
+    </Component>
+    <Component class="javax.swing.JButton" name="buttonCanceled">
+      <Properties>
+        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+          <Font name="Exo 2 SemiBold" size="14" style="1"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="Canceled"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="buttonCanceledActionPerformed"/>
+      </Events>
     </Component>
   </SubComponents>
 </Form>

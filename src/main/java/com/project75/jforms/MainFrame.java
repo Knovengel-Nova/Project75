@@ -1,8 +1,9 @@
 package com.project75.jforms;
 
-import com.project75.app.Project75;
 import javax.swing.DefaultListModel;
 import com.project75.core.*;
+import com.project75.jpanels.DailySubjectCard;
+import com.project75.jpanels.DailySubjectCardHolderPanel;
 import com.project75.jpanels.SubjectCard;
 import com.project75.jpanels.subjectCardsHolderPanel;
 import java.util.ArrayList;
@@ -14,27 +15,32 @@ import javax.swing.table.DefaultTableModel;
  * @author Aryan
  */
 public class MainFrame extends javax.swing.JFrame {
-
-    private final subjectCardsHolderPanel cardsHolder;
-    private final int day;
-
+    
+    private Student studentUser;
     private Data data;
-    private final Project75 parent;
-
+    private final int day;
+    
     private DefaultListModel<Subject> listModel;
     private DefaultTableModel tableModel;
-
+    
     private ArrayList<Subject> todaysSubject = new ArrayList<>();
+    
+    private final subjectCardsHolderPanel cardsHolder;
+    private final DailySubjectCardHolderPanel dailyHolder;
 
+    public Student getStudentUser(){
+        return studentUser;
+    }
+    
     private void init() {
-
-        this.data = parent.getData();
         this.listModel = new DefaultListModel<>();
 
         if (this.data.getTimetableData() == null) {
             this.tableModel = new DefaultTableModel(new Object[10][5], new String[]{"Monday", "Tuesday", "Wednesday", "Thursday", "Friday"});
+            textAreaText.setText("Welcome "+studentUser.getStuName());
         } else {
             this.tableModel = new DefaultTableModel(this.data.getTimetableData(), this.data.getTimetableColumns());
+            textAreaText.setText("Welcome Back "+studentUser.getStuName());
         }
         tableTable.setModel(tableModel);
 
@@ -49,25 +55,29 @@ public class MainFrame extends javax.swing.JFrame {
         listSecondaryList.setModel(listModel);
     }
 
-    public MainFrame(Project75 parent) {
+    public MainFrame(Student student) {
+        
+        this.studentUser = student;
+        this.data = student.getStudentData();
 
         //  data retrieval
-        this.parent = parent;
-        day = Project75.getDayOfTheWeekInt();
+        day = Utility.getDayOfTheWeekInt();
 
         initComponents();
+        labelNotes.setText("file: _"+studentUser.getStuUID()+"_DATA.ser loaded successfully from saves/"+studentUser.getStuUID());
+        
+        cardsHolder = new subjectCardsHolderPanel();
+        dailyHolder = new DailySubjectCardHolderPanel(this);
 
         init();
         initDaily();
 
         //  initialze day date section
-        labelDateOfTheMonth.setText(Project75.getDateOfTheMonth());
-        labelDayOfTheWeek.setText(Project75.getDayOfTheWeek());
-        labelMonthOfTheYear.setText(Project75.getMonthOfTheYear());
-        labelYear.setText(Project75.getYear());
-
+        labelDateOfTheMonth.setText(Utility.getDateOfTheMonth());
+        labelDayOfTheWeek.setText(Utility.getDayOfTheWeek());
+        labelMonthOfTheYear.setText(Utility.getMonthOfTheYear());
+        labelYear.setText(Utility.getYear());
         //  set the CardHolder Panel
-        cardsHolder = new subjectCardsHolderPanel();
 
         loadSubjectCards();
 
@@ -75,14 +85,31 @@ public class MainFrame extends javax.swing.JFrame {
         JScrollPane scroll = new JScrollPane(cardsHolder);
         scroll.setBorder(null);
         scroll.getVerticalScrollBar().setUnitIncrement(16);
+        
+        JScrollPane scroll2 = new JScrollPane(dailyHolder);
+        scroll2.setBorder(null);
+        scroll2.getVerticalScrollBar().setUnitIncrement(16);
 
         //  set border layout to accomodate Subject cards in 3xN form
         panelAttendanceStats.setLayout(new java.awt.BorderLayout());
         panelAttendanceStats.add(scroll, java.awt.BorderLayout.CENTER);
-
+        
+        panelDaily.setLayout(new java.awt.BorderLayout());
+        panelDaily.add(scroll2, java.awt.BorderLayout.CENTER);
+    }
+    
+    private void loadDailyCards(){
+        for(int i=0; i<todaysSubject.size(); i++){
+            DailySubjectCard temp = new DailySubjectCard(todaysSubject.get(i));
+            dailyHolder.addDailyCard(temp);
+        }
+        
+        dailyHolder.revalidate();
+        dailyHolder.repaint();
     }
 
     private void initDaily() {
+        todaysSubject.clear();
         if (day > 4) {
             return;
         }
@@ -102,6 +129,8 @@ public class MainFrame extends javax.swing.JFrame {
                 todaysSubject.add((Subject) obj);
             }
         }
+        
+        loadDailyCards();
 
         System.out.println("Todays Subjects: ");
         for (Subject s : todaysSubject) {
@@ -136,6 +165,8 @@ public class MainFrame extends javax.swing.JFrame {
         labelMonthOfTheYear = new javax.swing.JLabel();
         labelYear = new javax.swing.JLabel();
         panelDaily = new javax.swing.JPanel();
+        jPanel1 = new javax.swing.JPanel();
+        labelNotes = new javax.swing.JLabel();
         menuBar = new javax.swing.JMenuBar();
         menuFile = new javax.swing.JMenu();
         menuItemSave = new javax.swing.JMenuItem();
@@ -144,8 +175,9 @@ public class MainFrame extends javax.swing.JFrame {
         jMenu2 = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("MainFrame");
-        setMinimumSize(new java.awt.Dimension(1016, 580));
+        setTitle("Project75");
+        setMaximumSize(new java.awt.Dimension(1016, 600));
+        setMinimumSize(new java.awt.Dimension(1016, 600));
         setResizable(false);
 
         listSubjectLis.setFont(new java.awt.Font("Exo 2 SemiBold", 1, 24)); // NOI18N
@@ -208,15 +240,15 @@ public class MainFrame extends javax.swing.JFrame {
                     .addGroup(panelSubjectListLayout.createSequentialGroup()
                         .addComponent(labelSubjects, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(scrollPaneListScroll, javax.swing.GroupLayout.PREFERRED_SIZE, 460, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(scrollPaneListScroll, javax.swing.GroupLayout.PREFERRED_SIZE, 438, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(panelSubjectListLayout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(buttonAddNewSubject, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(buttonRemoveSubject, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(scrollPaneTextScroll, javax.swing.GroupLayout.PREFERRED_SIZE, 349, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap())
+                        .addComponent(scrollPaneTextScroll, javax.swing.GroupLayout.PREFERRED_SIZE, 327, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(28, 28, 28))
         );
 
         tabbedPane.addTab("Subject List", panelSubjectList);
@@ -229,7 +261,7 @@ public class MainFrame extends javax.swing.JFrame {
         );
         panelAttendanceStatsLayout.setVerticalGroup(
             panelAttendanceStatsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 534, Short.MAX_VALUE)
+            .addGap(0, 505, Short.MAX_VALUE)
         );
 
         tabbedPane.addTab("Attendance Stats", panelAttendanceStats);
@@ -283,12 +315,14 @@ public class MainFrame extends javax.swing.JFrame {
             }
         });
 
+        panelDayDate.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+
         labelDayOfTheWeek.setFont(new java.awt.Font("Exo 2 Medium", 3, 24)); // NOI18N
         labelDayOfTheWeek.setForeground(new java.awt.Color(255, 255, 255));
         labelDayOfTheWeek.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         labelDayOfTheWeek.setText("SATURDAY");
 
-        labelDateOfTheMonth.setFont(new java.awt.Font("Exo 2 ExtraBold", 3, 128)); // NOI18N
+        labelDateOfTheMonth.setFont(new java.awt.Font("Exo 2 ExtraBold", 3, 110)); // NOI18N
         labelDateOfTheMonth.setForeground(new java.awt.Color(255, 255, 255));
         labelDateOfTheMonth.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         labelDateOfTheMonth.setText("17");
@@ -320,14 +354,17 @@ public class MainFrame extends javax.swing.JFrame {
             .addGroup(panelDayDateLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(labelYear, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(panelDayDateLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGroup(panelDayDateLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(panelDayDateLayout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(labelDayOfTheWeek, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(labelMonthOfTheYear, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(labelDateOfTheMonth, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap())
+                        .addComponent(labelMonthOfTheYear, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18))
+                    .addGroup(panelDayDateLayout.createSequentialGroup()
+                        .addGap(18, 18, 18)
+                        .addComponent(labelDateOfTheMonth, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
 
         javax.swing.GroupLayout panelTimeTableLayout = new javax.swing.GroupLayout(panelTimeTable);
@@ -361,7 +398,7 @@ public class MainFrame extends javax.swing.JFrame {
                             .addComponent(buttonAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(18, 18, 18)
                         .addComponent(panelDayDate, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addComponent(scrollPaneTable, javax.swing.GroupLayout.DEFAULT_SIZE, 522, Short.MAX_VALUE))
+                    .addComponent(scrollPaneTable, javax.swing.GroupLayout.DEFAULT_SIZE, 493, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
@@ -375,10 +412,26 @@ public class MainFrame extends javax.swing.JFrame {
         );
         panelDailyLayout.setVerticalGroup(
             panelDailyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 534, Short.MAX_VALUE)
+            .addGap(0, 505, Short.MAX_VALUE)
         );
 
         tabbedPane.addTab("Daily ", panelDaily);
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 1016, Short.MAX_VALUE)
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 505, Short.MAX_VALUE)
+        );
+
+        tabbedPane.addTab("Report", jPanel1);
+
+        labelNotes.setBackground(new java.awt.Color(102, 102, 102));
+        labelNotes.setFont(new java.awt.Font("Exo 2 SemiBold", 3, 14)); // NOI18N
 
         menuFile.setText("File");
 
@@ -424,10 +477,18 @@ public class MainFrame extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(tabbedPane)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(labelNotes, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(tabbedPane)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(tabbedPane, javax.swing.GroupLayout.PREFERRED_SIZE, 540, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(labelNotes, javax.swing.GroupLayout.DEFAULT_SIZE, 25, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         pack();
@@ -445,7 +506,9 @@ public class MainFrame extends javax.swing.JFrame {
         textAreaText.setText("");   //  clear the text area
 
         if (listSubjectLis.getSelectedIndex() != -1) {
-            textAreaText.append("Removed Subject! ");
+//            textAreaText.append("Removed Subject: \""+listModel.getElementAt(listSubjectLis.getSelectedIndex())+"\"");
+            labelNotes.setText("Removed Subject: \""+listModel.getElementAt(listSubjectLis.getSelectedIndex())+"\"");
+            System.out.println("\"Removed Subject: \\\"\"+listModel.getElementAt(listSubjectLis.getSelectedIndex())+\"\\\"\"");
             Subject temp = listModel.getElementAt(listSubjectLis.getSelectedIndex());
 
             //  remove from Subject Cards
@@ -460,9 +523,11 @@ public class MainFrame extends javax.swing.JFrame {
             //  remove from the model
             listModel.removeElementAt(listSubjectLis.getSelectedIndex());
         } else if (listModel.getSize() == 0) {  // if the list is empty
-            textAreaText.append("List is Empty!");
+            labelNotes.setText("Subject List is Empty. Can't Delete");
+            System.out.println("Subject List is Empty. Can't Delete");
         } else {     //if no student is selected
-            textAreaText.append("Please select a Subject!");
+            labelNotes.setText("Please First select any subject from the Subject List.");
+            System.out.println("Please First select any subject from the Subject List.");
         }
     }//GEN-LAST:event_buttonRemoveSubjectActionPerformed
 
@@ -508,31 +573,39 @@ public class MainFrame extends javax.swing.JFrame {
     //  Time Table Add Button
     private void buttonAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonAddActionPerformed
         if (listModel.getSize() == 0) {  //  check for subject list is empty or not
-            System.out.println("List is Empty!");
+            labelNotes.setText("Subject List is Empty. Can't Add Null Subject to TimeTable");
+            System.out.println("Subject List is Empty. Can't Add Null Subject to TimeTable");
             return;
         } else if (listSecondaryList.getSelectedIndex() == -1) {    //  if no subject is selected
-            System.out.println("Please Select a Subject from the list");
+            labelNotes.setText("Please Select a Valid Subject from the Subject List.");
+            System.out.println("Please Select a Valid Subject from the Subject List.");
             return;
         }
         //  if no cell is selected from the table
         if (tableTable.getSelectedColumn() > 5 || tableTable.getSelectedColumn() < 0 || tableTable.getSelectedRow() > 10 || tableTable.getSelectedRow() < 0) {
-            System.out.println("Please select a cell in the table first.");
+            labelNotes.setText("Please First Select a valid cell from the Table.");
+            System.out.println("Please First Select a valid cell from the Table.");
             return;
         }
 
         tableTable.setValueAt(listModel.getElementAt(listSecondaryList.getSelectedIndex()), tableTable.getSelectedRow(), tableTable.getSelectedColumn());
+        labelNotes.setText("Subject: "+listModel.getElementAt(listSecondaryList.getSelectedIndex())+" Added into the Time Table at location ("+tableTable.getSelectedRow()+", "+tableTable.getSelectedColumn()+").");
+        System.out.println("Subject: "+listModel.getElementAt(listSecondaryList.getSelectedIndex())+" Added into the Time Table at location ("+tableTable.getSelectedRow()+", "+tableTable.getSelectedColumn()+").");
     }//GEN-LAST:event_buttonAddActionPerformed
 
     //  Time Table cell data remove button
     private void buttonRemoveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonRemoveActionPerformed
         tableTable.setValueAt(null, tableTable.getSelectedRow(), tableTable.getSelectedColumn());
+        labelNotes.setText("Subject Removed from the Time Table from location ("+tableTable.getSelectedRow()+", "+tableTable.getSelectedColumn()+").");
+        System.out.println("Subject Removed from the Time Table from location ("+tableTable.getSelectedRow()+", "+tableTable.getSelectedColumn()+").");
     }//GEN-LAST:event_buttonRemoveActionPerformed
 
     //  file menu save button clicked
     private void menuItemSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemSaveActionPerformed
         saveUIToData();
-        parent.setData(data);
-        Project75.saveDataFile(data);
+        studentUser.setStudentData(data);
+        Utility.saveStudentDataFile(studentUser);
+        labelNotes.setText("file: _"+studentUser.getStuUID()+"_DATA.ser saved successfully in saves/"+studentUser.getStuUID());
     }//GEN-LAST:event_menuItemSaveActionPerformed
 
     private void saveUIToData() {
@@ -562,8 +635,8 @@ public class MainFrame extends javax.swing.JFrame {
 
     //  file menu retrieve button clicked
     private void menuItemLoadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemLoadActionPerformed
-        Project75.retrieveSaveDataFile(parent);
-        this.data = parent.getData();
+        this.data = studentUser.getStudentData();
+        labelNotes.setText("file: _"+studentUser.getStuUID()+"_DATA.ser loaded successfully from saves/"+studentUser.getStuUID());
         reload();
     }//GEN-LAST:event_menuItemLoadActionPerformed
 
@@ -625,13 +698,15 @@ public class MainFrame extends javax.swing.JFrame {
     public void addSubjectToList(Subject subject) {
 
         if (data.getSemester().hasSubject(subject.getSubCode())) {
-            textAreaText.setText("Subject Already present in Subject List!");
+            labelNotes.setText("Subject: "+subject.toString()+" Already present in Subject List!");
+            System.out.println("Subject: "+subject.toString()+" Already present in Subject List!");
             return;
         }
         listModel.addElement(subject);
         data.getSemester().addSub(subject);
         cardsHolder.addCard(new SubjectCard(subject));
-        textAreaText.setText("New Subject added!");
+        labelNotes.setText("Subject: "+subject.toString()+" Added in the Subject List!");
+        System.out.println("Subject: "+subject.toString()+" Added in the Subject List!");
     }
 
 
@@ -641,9 +716,11 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JButton buttonRemove;
     private javax.swing.JButton buttonRemoveSubject;
     private javax.swing.JMenu jMenu2;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JLabel labelDateOfTheMonth;
     private javax.swing.JLabel labelDayOfTheWeek;
     private javax.swing.JLabel labelMonthOfTheYear;
+    private javax.swing.JLabel labelNotes;
     private javax.swing.JLabel labelSubjects;
     private javax.swing.JLabel labelYear;
     private javax.swing.JList<Subject> listSecondaryList;

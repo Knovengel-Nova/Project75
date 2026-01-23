@@ -1,7 +1,7 @@
 package com.project75.jpanels;
 
-import com.project75.app.Project75;
 import com.project75.core.Subject;
+import com.project75.core.Utility;
 import com.project75.jforms.ChangeLectureForm;
 
 /**
@@ -12,6 +12,10 @@ public class DailySubjectCard extends javax.swing.JPanel {
 
     private Subject subject;
 
+    public Subject getSubject() {
+        return subject;
+    }
+
     public DailySubjectCard(Subject subject) {
         initComponents();
         this.subject = subject;
@@ -19,8 +23,8 @@ public class DailySubjectCard extends javax.swing.JPanel {
     }
 
     void init() {
-        this.labelDate.setText(Project75.getDateOfTheMonth());
-        this.labelDayOfTheWeek.setText(Project75.getDayOfTheWeek());
+        this.labelDate.setText(Utility.getDateOfTheMonth());
+        this.labelDayOfTheWeek.setText(Utility.getDayOfTheWeek());
         this.labelSubjectName.setText(subject.getSubName());
         this.labelProfessorName.setText("~ " + subject.getSubProfessor());
         int a = subject.getAttendedLectures();
@@ -35,7 +39,7 @@ public class DailySubjectCard extends javax.swing.JPanel {
         this.subject = subject;
         init();
     }
-
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -50,6 +54,7 @@ public class DailySubjectCard extends javax.swing.JPanel {
         labelSubjectName = new javax.swing.JLabel();
         labelProfessorName = new javax.swing.JLabel();
         labelLectures = new javax.swing.JLabel();
+        buttonCanceled = new javax.swing.JButton();
 
         setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
@@ -71,6 +76,11 @@ public class DailySubjectCard extends javax.swing.JPanel {
 
         buttonAttending.setFont(new java.awt.Font("Exo 2 SemiBold", 1, 24)); // NOI18N
         buttonAttending.setText("Attending");
+        buttonAttending.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buttonAttendingActionPerformed(evt);
+            }
+        });
 
         labelPercent.setFont(new java.awt.Font("Exo 2 SemiBold", 1, 36)); // NOI18N
         labelPercent.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -96,29 +106,41 @@ public class DailySubjectCard extends javax.swing.JPanel {
         labelLectures.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         labelLectures.setText("9/12");
 
+        buttonCanceled.setFont(new java.awt.Font("Exo 2 SemiBold", 1, 14)); // NOI18N
+        buttonCanceled.setText("Canceled");
+        buttonCanceled.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buttonCanceledActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+            .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(labelSubjectName, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(progBarPercent, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(buttonAttending, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(labelSubjectName, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(progBarPercent, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(layout.createSequentialGroup()
                         .addComponent(labelPercent, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(labelDayOfTheWeek, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(labelDate, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                    .addComponent(labelProfessorName, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                        .addComponent(buttonMissing, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(buttonChangeLecture, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(labelLectures, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(labelProfessorName, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(labelLectures, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createSequentialGroup()
+                            .addComponent(buttonAttending, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(buttonChangeLecture, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGap(0, 0, Short.MAX_VALUE))
+                        .addGroup(layout.createSequentialGroup()
+                            .addComponent(buttonMissing, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(buttonCanceled, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -140,11 +162,13 @@ public class DailySubjectCard extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 18, Short.MAX_VALUE)
                 .addComponent(labelLectures)
                 .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(buttonChangeLecture, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(buttonAttending, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(buttonMissing, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(buttonChangeLecture, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(buttonAttending, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(buttonCanceled, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
@@ -158,8 +182,17 @@ public class DailySubjectCard extends javax.swing.JPanel {
         subject.setTotalLectures(subject.getTotalLectures() + 1);
     }//GEN-LAST:event_buttonMissingActionPerformed
 
+    private void buttonCanceledActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonCanceledActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_buttonCanceledActionPerformed
+
+    private void buttonAttendingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonAttendingActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_buttonAttendingActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton buttonAttending;
+    private javax.swing.JButton buttonCanceled;
     private javax.swing.JButton buttonChangeLecture;
     private javax.swing.JButton buttonMissing;
     private javax.swing.JLabel labelDate;

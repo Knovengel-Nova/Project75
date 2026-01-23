@@ -1,27 +1,31 @@
 package com.project75.core;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.util.ArrayList;
 
 /**
  *
  * @author Aryan
  */
 public class Data implements Serializable{
-    private Student student;
     private Semester semester;
     private Object[][] timetableData;
     private String[] timetableColumns;
     private Subject[] listData;
-    private Date lastDateUpdated;
-    private int[] todaysSubjectsStat;
+    private ArrayList<SubjectReportCell> attendanceReport = new ArrayList<>();
 
-    public Date getLastDateUpdated() {
-        return lastDateUpdated;
+    
+    public void addSubjectToReport(Subject subject, int status){
+        SubjectReportCell temp = new SubjectReportCell(subject, status);
+        this.attendanceReport.add(temp);
     }
-
-    public void setLastDateUpdated(Date lastDateUpdated) {
-        this.lastDateUpdated = lastDateUpdated;
+    
+    public SubjectReportCell getLastAddedCellToReport(){
+        return attendanceReport.getLast();
+    }
+    
+    public SubjectReportCell[] getAttendenceReport(){
+        return attendanceReport.toArray(new SubjectReportCell[0]);
     }
 
     public Subject[] getListData() {
@@ -48,21 +52,11 @@ public class Data implements Serializable{
         this.timetableColumns = timetableColumns;
     }
 
-    public Data(Student student, Semester semester, Subject[][] timetableData, String[] timetableColumns, Subject[] listData) {
-        this.student = student;
+    public Data(Semester semester, Subject[][] timetableData, String[] timetableColumns, Subject[] listData) {
         this.semester = semester;
         this.timetableData = timetableData;
         this.timetableColumns = timetableColumns;
         this.listData = listData;
-    }
-
-
-    public Student getStudent() {
-        return student;
-    }
-
-    public void setStudent(Student student) {
-        this.student = student;
     }
 
     public Semester getSemester() {
